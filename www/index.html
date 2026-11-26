@@ -2,6 +2,9 @@
 <html lang="id" class="dark">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="theme-color" content="#090b10" />
   <meta name="robots" content="noindex, nofollow" />
@@ -42,12 +45,23 @@
   </script>
   <style>
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html, body {
+    html {
       margin: 0; padding: 0;
+      height: auto;
+      min-height: 100%;
+      background: #090b10;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    body {
+      margin: 0; padding: 0;
+      min-height: 100%;
       background: #090b10; color: #f4f4f5;
       font-family: 'Inter', system-ui, sans-serif;
-      overflow-x: hidden;
-      overscroll-behavior-y: contain;
+      overflow-y: auto;
+      overflow-x: clip;
+      touch-action: pan-y;
+      -webkit-overflow-scrolling: touch;
     }
     .font-arabic { font-family: 'Cairo', sans-serif; }
     .font-display { font-family: 'Outfit', 'Inter', sans-serif; }
@@ -69,8 +83,9 @@
   <!-- =======================================================================
        1. MANDATORY OWNER / ADMIN LOGIN GATE (TERKUNCI RBAC SERVER)
        ======================================================================= -->
-  <div id="ownerLoginGate" class="fixed inset-0 z-[150] bg-[#07090e] flex items-center justify-center p-4 overflow-y-auto">
-    <div class="anim-up w-full max-w-md rounded-3xl bg-[#111520] border border-white/10 p-6 sm:p-8 shadow-2xl space-y-5 my-auto">
+  <div id="ownerLoginGate" class="fixed inset-0 z-[150] bg-[#07090e] overflow-y-auto" style="-webkit-overflow-scrolling:touch; touch-action:pan-y;">
+    <div class="min-h-full flex items-center justify-center p-4 py-8">
+    <div class="anim-up w-full max-w-md rounded-3xl bg-[#111520] border border-white/10 p-6 sm:p-8 shadow-2xl space-y-5">
       <div class="text-center space-y-2">
         <div class="w-16 h-16 mx-auto rounded-2xl bg-[#0b0e16] border border-amber-400/40 flex items-center justify-center shadow-xl overflow-hidden">
           <img src="./icons/icon-192.png" alt="Owner OS" class="w-14 h-14 object-contain" />
@@ -110,6 +125,7 @@
         </button>
         <p class="text-[10.5px] text-zinc-500">Default awal Apps Script: <code class="text-zinc-300">admin@animedubar.com</code> / <code class="text-zinc-300">AdminAnimedubar2026!</code></p>
       </div>
+    </div>
     </div>
   </div>
 
@@ -190,7 +206,7 @@
       </header>
 
       <!-- DYNAMIC WORKSPACE SECTIONS -->
-      <main id="ownerWorkspace" class="flex-1 p-4 sm:p-6 max-w-7xl w-full mx-auto space-y-5"></main>
+      <main id="ownerWorkspace" class="flex-1 p-4 sm:p-6 pb-28 lg:pb-10 max-w-7xl w-full mx-auto space-y-5 overflow-x-clip" style="touch-action:pan-y;"></main>
     </div>
 
     <!-- MOBILE BOTTOM NAVIGATION BAR (5 TABS — NYAMAN DI HP / APK!) -->
@@ -506,7 +522,7 @@
         b.className = `onav-mob relative flex flex-col items-center gap-0.5 ${act ? "text-emerald-400" : "text-zinc-400"}`;
       });
       renderActiveTab();
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo(0, 0);
     }
 
     function openMobileMoreDrawer() { document.getElementById("mobileMoreDrawer").classList.remove("hidden"); }
@@ -1301,7 +1317,7 @@
               <button type="submit" class="w-full py-2 rounded-xl bg-sky-600/25 hover:bg-sky-600/40 text-sky-200 font-bold">Simpan Kunci Push OneSignal</button>
             </form>
 
-            <div class="p-4 rounded-2xl bg-surface border border-white/10 space-y-2 max-h-72 overflow-y-auto">
+            <div class="p-4 rounded-2xl bg-surface border border-white/10 space-y-2 lg:max-h-72 lg:overflow-y-auto">
               <h4 class="font-extrabold text-white">Riwayat Broadcast Terakhir (${notifs.length})</h4>
               ${notifs.slice(0, 12).map(n => `
                 <div class="p-2.5 rounded-xl bg-[#090b10] border border-white/5">
@@ -1385,7 +1401,7 @@
                 <button type="button" onclick="fetchDriveVideoFiles()" class="px-3 py-1.5 rounded-lg bg-sky-600/25 text-sky-300 font-bold">↻ Muat File Drive</button>
               </div>
               <input id="drvFolderFilter" placeholder="Folder ID Google Drive (Opsional)" class="w-full h-9 rounded-xl bg-[#090b10] border border-white/10 px-3 font-mono text-zinc-300" />
-              <div class="max-h-40 overflow-y-auto space-y-1.5">
+              <div class="lg:max-h-48 lg:overflow-y-auto space-y-1.5">
                 ${files.length ? files.map(f => `
                   <div class="p-2 rounded-lg bg-[#090b10] flex items-center justify-between gap-2">
                     <span class="truncate text-zinc-200">${esc(f.name)}</span>
@@ -1473,7 +1489,7 @@
 
         <div class="p-4 sm:p-5 rounded-2xl bg-surface border border-white/10 space-y-2.5 text-xs">
           <h3 class="text-sm font-black text-white">Audit Log Aktivitas Admin (${logs.length})</h3>
-          <div class="max-h-72 overflow-y-auto space-y-1.5">
+          <div class="lg:max-h-72 lg:overflow-y-auto space-y-1.5">
             ${logs.slice(0, 30).map(l => `
               <div class="p-2.5 rounded-xl bg-[#090b10] border border-white/5 flex flex-wrap justify-between gap-2 text-[11px]">
                 <span><strong class="text-amber-300">${esc(l.role)}</strong> · ${esc(l.action)} (${esc(l.entityType)}: ${esc(l.entityId)})</span>

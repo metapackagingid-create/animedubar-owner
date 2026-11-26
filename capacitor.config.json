@@ -3,9 +3,18 @@
   "appName": "Animedubar Owner",
   "webDir": "www",
   "bundledWebRuntime": false,
+  "server": {
+    "url": "https://metapackagingid-create.github.io/animedubar-owner/",
+    "cleartext": true,
+    "androidScheme": "https",
+    "errorPath": "offline.html",
+    "allowNavigation": [
+      "*.github.io",
+      "*.pages.dev"
+    ]
+  },
   "android": {
     "allowMixedContent": true,
-    "captureInput": true,
     "webContentsDebuggingEnabled": false
   },
   "plugins": {
