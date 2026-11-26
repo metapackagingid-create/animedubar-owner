@@ -1,0 +1,49 @@
+name: Deploy Web Panel Pemilik (GitHub Pages Gratis)
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages-owner"
+  cancel-in-progress: false
+
+jobs:
+  deploy-owner-web:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 2. Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 3. Inject Backend URL ke Web Pemilik
+        env:
+          BACKEND_WEBAPP_URL: ${{ secrets.BACKEND_WEBAPP_URL }}
+          ONESIGNAL_OWNER_APP_ID: ${{ secrets.ONESIGNAL_OWNER_APP_ID }}
+        run: node scripts/configure-android.mjs
+
+      - name: 4. Setup GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: 5. Upload Folder www/ sebagai Web Pemilik
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './www'
+
+      - name: 6. Deploy ke GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
