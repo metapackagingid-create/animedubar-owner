@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#090b10" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="ADBR Owner" />
+  <title>Animedubar Owner OS — Aplikasi &amp; Web Panel Pemilik</title>
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/png" href="./icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            obsidian: '#090b10',
+            surface: '#111520',
+            card: '#161b29',
+            brand: '#E50914',
+            emeraldPro: '#10B981',
+            vip: '#F59E0B'
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            arabic: ['Cairo', 'sans-serif'],
+            display: ['Outfit', 'Inter', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body {
+      margin: 0; padding: 0;
+      background: #090b10; color: #f4f4f5;
+      font-family: 'Inter', system-ui, sans-serif;
+      overflow-x: hidden;
+      overscroll-behavior-y: contain;
+    }
+    .font-arabic { font-family: 'Cairo', sans-serif; }
+    .font-display { font-family: 'Outfit', 'Inter', sans-serif; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .safe-top { padding-top: max(env(safe-area-inset-top), 10px); }
+    .safe-bottom { padding-bottom: max(env(safe-area-inset-bottom), 8px); }
+    .vip-gradient { background: linear-gradient(135deg, #FDE047 0%, #F59E0B 50%, #D97706 100%); }
+    .owner-gradient { background: linear-gradient(135deg, #10B981 0%, #059669 100%); }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .anim-up { animation: fadeUp 0.2s cubic-bezier(.16,1,.3,1) forwards; }
+  </style>
+</head>
+<body class="bg-obsidian text-zinc-100 min-h-screen">
+
+  <!-- =======================================================================
+       1. MANDATORY OWNER / ADMIN LOGIN GATE (TERKUNCI RBAC SERVER)
+       ======================================================================= -->
+  <div id="ownerLoginGate" class="fixed inset-0 z-[150] bg-[#07090e] flex items-center justify-center p-4 overflow-y-auto">
+    <div class="anim-up w-full max-w-md rounded-3xl bg-[#111520] border border-white/10 p-6 sm:p-8 shadow-2xl space-y-5 my-auto">
+      <div class="text-center space-y-2">
+        <div class="w-16 h-16 mx-auto rounded-2xl bg-[#0b0e16] border border-amber-400/40 flex items-center justify-center shadow-xl overflow-hidden">
+          <img src="./icons/icon-192.png" alt="Owner OS" class="w-14 h-14 object-contain" />
+        </div>
+        <div class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/35 text-emerald-300 text-[10px] font-black uppercase tracking-wider">
+          <span>🔒</span><span>KHUSUS PEMILIK &amp; ADMIN</span>
+        </div>
+        <h1 class="font-display font-black text-2xl text-white">Animedubar Owner OS</h1>
+        <p class="text-xs text-zinc-400">Kelola Upload Film/Anime, Pelanggan, Pembayaran VIP, Broadcast &amp; Pengaturan dari HP (APK) maupun Web Laptop.</p>
+      </div>
+
+      <form onsubmit="handleOwnerLogin(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block text-zinc-300 font-bold mb-1">URL Backend Google Apps Script (Web App)</label>
+          <input id="gateBackendUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full h-11 rounded-xl bg-[#090b10] border border-emerald-500/30 px-3.5 text-emerald-300 font-mono text-[11px] focus:border-emerald-400 focus:outline-none" />
+        </div>
+        <div>
+          <label class="block text-zinc-300 font-bold mb-1">Email Admin *</label>
+          <input id="gateEmail" type="email" required value="admin@animedubar.com" placeholder="admin@animedubar.com" class="w-full h-11 rounded-xl bg-[#090b10] border border-white/10 px-3.5 text-white focus:border-amber-400 focus:outline-none" />
+        </div>
+        <div>
+          <label class="block text-zinc-300 font-bold mb-1">Password Admin *</label>
+          <input id="gatePassword" type="password" required placeholder="Password Super Admin" class="w-full h-11 rounded-xl bg-[#090b10] border border-white/10 px-3.5 text-white focus:border-amber-400 focus:outline-none" />
+        </div>
+        <div>
+          <label class="block text-zinc-400 font-semibold mb-1">Kode 2FA Admin (Opsional — isi jika diaktifkan)</label>
+          <input id="gateTotp" type="text" placeholder="Kode 2FA" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3.5 text-amber-300 font-mono focus:border-amber-400 focus:outline-none" />
+        </div>
+        <button id="gateSubmitBtn" type="submit" class="w-full py-3.5 rounded-xl owner-gradient text-black font-black text-sm shadow-lg shadow-emerald-500/25 hover:brightness-110 transition">
+          Masuk ke Panel Pemilik →
+        </button>
+      </form>
+
+      <div class="pt-2 border-t border-white/10 flex flex-col gap-2 text-center">
+        <button type="button" onclick="enterLocalPreviewMode()" class="w-full py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 text-xs font-bold transition">
+          Buka Mode Preview Lokal (Tanpa Server)
+        </button>
+        <p class="text-[10.5px] text-zinc-500">Default awal Apps Script: <code class="text-zinc-300">admin@animedubar.com</code> / <code class="text-zinc-300">AdminAnimedubar2026!</code></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       2. MAIN OWNER SHELL (DESKTOP SIDEBAR + MOBILE APP BOTTOM BAR)
+       ======================================================================= -->
+  <div id="ownerAppShell" class="hidden min-h-screen flex flex-col lg:flex-row">
+
+    <!-- DESKTOP LEFT SIDEBAR (WEB LAPTOP / TABLET) -->
+    <aside class="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0 bg-[#0d1018] border-r border-white/10 z-40">
+      <div class="p-5 border-b border-white/10 flex items-center gap-3">
+        <img src="./icons/icon-192.png" alt="Logo" class="w-10 h-10 rounded-xl border border-amber-400/30" />
+        <div class="min-w-0">
+          <p class="font-display font-black text-lg text-white leading-none">Animedubar</p>
+          <span class="text-[10px] font-extrabold text-emerald-400 tracking-wider uppercase">OWNER OS · WEB &amp; APK</span>
+        </div>
+      </div>
+
+      <nav class="flex-1 p-3 space-y-1 overflow-y-auto text-xs font-bold">
+        <button type="button" data-otab="dashboard" onclick="switchOwnerTab('dashboard')" class="onav-desk w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-emerald-600/20 text-emerald-300 border border-emerald-500/30">
+          <span class="text-base">📊</span><span>Dashboard Statistik</span>
+        </button>
+        <button type="button" data-otab="upload" onclick="switchOwnerTab('upload')" class="onav-desk w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-zinc-300 hover:bg-white/5">
+          <span class="text-base">🎬</span><span>Studio Upload Pro</span>
+        </button>
+        <button type="button" data-otab="catalog" onclick="switchOwnerTab('catalog')" class="onav-desk w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-zinc-300 hover:bg-white/5">
+          <span class="text-base">📚</span><span>Kelola Katalog</span>
+        </button>
+        <button type="button" data-otab="payments" onclick="switchOwnerTab('payments')" class="onav-desk w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-zinc-300 hover:bg-white/5">
+          <span class="flex items-center gap-3"><span class="text-base">💳</span><span>Transaksi &amp; VIP</span></span>
+          <span id="deskPendingPayBadge" class="hidden px-1.5 py-0.5 rounded-full bg-amber-400 text-black text-[10px] font-black">0</span>
+        </button>
+        <button type="button" data-otab="users" onclick="switchOwnerTab('users')" class="onav-desk w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-zinc-300 hover:bg-white/5">
+          <span class="text-base">👥</span><span>Akun &amp; Staff RBAC</span>
+        </button>
+        <button type="button" data-otab="broadcast" onclick="switchOwnerTab('broadcast')" class="onav-desk w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-zinc-300 hover:bg-white/5">
+          <span class="text-base">📢</span><span>Broadcast &amp; OneSignal</span>
+        </button>
+        <button type="button" data-otab="drive" onclick="switchOwnerTab('drive')" class="onav-desk w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-zinc-300 hover:bg-white/5">
+          <span class="text-base">☁️</span><span>Google Drive &amp; Jobs</span>
+        </button>
+        <button type="button" data-otab="settings" onclick="switchOwnerTab('settings')" class="onav-desk w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-zinc-300 hover:bg-white/5">
+          <span class="text-base">⚙️</span><span>Pengaturan &amp; Audit</span>
+        </button>
+      </nav>
+
+      <div class="p-4 border-t border-white/10 space-y-2.5 text-xs">
+        <div class="p-3 rounded-xl bg-[#141926] border border-white/10">
+          <p id="deskAdminName" class="font-extrabold text-white truncate">Super Admin</p>
+          <p id="deskAdminRole" class="text-[10px] text-amber-400 font-bold uppercase mt-0.5">SUPER_ADMIN</p>
+        </div>
+        <button type="button" onclick="logoutOwner()" class="w-full py-2 rounded-xl bg-red-600/20 hover:bg-red-600/35 border border-red-500/30 text-red-300 font-bold transition">Keluar / Logout</button>
+      </div>
+    </aside>
+
+    <!-- RIGHT WORKSPACE AREA -->
+    <div class="flex-1 flex flex-col lg:pl-64 min-h-screen pb-20 lg:pb-8">
+      <!-- Sticky Topbar (Desktop & Mobile) -->
+      <header class="sticky top-0 z-30 bg-[#090b10]/92 backdrop-blur-xl border-b border-white/10 safe-top">
+        <div class="px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <img src="./icons/icon-192.png" alt="Icon" class="lg:hidden w-8 h-8 rounded-lg border border-amber-400/30 shrink-0" />
+            <div class="min-w-0">
+              <h2 id="topPageTitle" class="font-display font-black text-base sm:text-xl text-white truncate">Dashboard Pemilik</h2>
+              <div class="flex items-center gap-1.5 text-[10.5px]">
+                <span id="serverStatusDot" class="w-2 h-2 rounded-full bg-amber-400"></span>
+                <span id="serverStatusLabel" class="text-zinc-400 truncate">Menyambungkan...</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 shrink-0">
+            <button id="pwaInstallBtn" type="button" onclick="triggerPwaInstall()" class="hidden px-3 py-1.5 rounded-xl bg-amber-500/20 border border-amber-400/40 text-amber-300 text-xs font-extrabold">📲 Instal App</button>
+            <button id="btnTopSync" type="button" onclick="syncAllOwnerData(false)" class="px-3 py-1.5 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/35 border border-emerald-500/35 text-emerald-300 text-xs font-bold transition">↻ Sync</button>
+            <button type="button" onclick="switchOwnerTab('upload')" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-brand hover:brightness-110 text-white text-xs font-extrabold shadow-lg shadow-brand/25 transition">+ Upload Anime</button>
+          </div>
+        </div>
+      </header>
+
+      <!-- DYNAMIC WORKSPACE SECTIONS -->
+      <main id="ownerWorkspace" class="flex-1 p-4 sm:p-6 max-w-7xl w-full mx-auto space-y-5"></main>
+    </div>
+
+    <!-- MOBILE BOTTOM NAVIGATION BAR (5 TABS — NYAMAN DI HP / APK!) -->
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0d1018]/96 backdrop-blur-xl border-t border-white/10 safe-bottom grid grid-cols-5 pt-1.5 pb-1 text-[10px] font-bold">
+      <button type="button" data-otab="dashboard" onclick="switchOwnerTab('dashboard')" class="onav-mob flex flex-col items-center gap-0.5 text-emerald-400">
+        <span class="text-lg leading-none">📊</span><span>Beranda</span>
+      </button>
+      <button type="button" data-otab="upload" onclick="switchOwnerTab('upload')" class="onav-mob flex flex-col items-center gap-0.5 text-zinc-400">
+        <span class="text-lg leading-none">🎬</span><span>Upload</span>
+      </button>
+      <button type="button" data-otab="catalog" onclick="switchOwnerTab('catalog')" class="onav-mob flex flex-col items-center gap-0.5 text-zinc-400">
+        <span class="text-lg leading-none">📚</span><span>Katalog</span>
+      </button>
+      <button type="button" data-otab="payments" onclick="switchOwnerTab('payments')" class="onav-mob relative flex flex-col items-center gap-0.5 text-zinc-400">
+        <span class="text-lg leading-none">💳</span><span>VIP</span>
+        <span id="mobPendingPayBadge" class="hidden absolute top-0 right-3 min-w-[16px] h-4 px-1 rounded-full bg-amber-400 text-black text-[9px] font-black flex items-center justify-center">0</span>
+      </button>
+      <button type="button" onclick="openMobileMoreDrawer()" class="flex flex-col items-center gap-0.5 text-zinc-400">
+        <span class="text-lg leading-none">☰</span><span>Menu</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- MOBILE MORE MENU DRAWER -->
+  <div id="mobileMoreDrawer" class="hidden fixed inset-0 z-[90] bg-black/70 backdrop-blur-sm flex items-end justify-center lg:hidden" onclick="if(event.target===this) closeMobileMoreDrawer()">
+    <div class="anim-up w-full rounded-t-3xl bg-[#111520] border-t border-white/15 p-5 safe-bottom space-y-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <p id="mobAdminName" class="text-sm font-black text-white">Super Admin</p>
+          <p id="mobAdminRole" class="text-[11px] text-amber-400 font-bold">SUPER_ADMIN</p>
+        </div>
+        <button type="button" onclick="closeMobileMoreDrawer()" class="w-8 h-8 rounded-full bg-white/10 text-white font-bold">✕</button>
+      </div>
+      <div class="grid grid-cols-2 gap-2.5 text-xs font-bold">
+        <button type="button" onclick="closeMobileMoreDrawer(); switchOwnerTab('users')" class="p-3.5 rounded-2xl bg-[#181e2e] border border-white/10 text-left space-y-1"><span class="text-xl block">👥</span><span>Akun &amp; Staff RBAC</span></button>
+        <button type="button" onclick="closeMobileMoreDrawer(); switchOwnerTab('broadcast')" class="p-3.5 rounded-2xl bg-[#181e2e] border border-white/10 text-left space-y-1"><span class="text-xl block">📢</span><span>Broadcast &amp; Push</span></button>
+        <button type="button" onclick="closeMobileMoreDrawer(); switchOwnerTab('drive')" class="p-3.5 rounded-2xl bg-[#181e2e] border border-white/10 text-left space-y-1"><span class="text-xl block">☁️</span><span>Google Drive Jobs</span></button>
+        <button type="button" onclick="closeMobileMoreDrawer(); switchOwnerTab('settings')" class="p-3.5 rounded-2xl bg-[#181e2e] border border-white/10 text-left space-y-1"><span class="text-xl block">⚙️</span><span>Pengaturan &amp; Audit</span></button>
+      </div>
+      <button type="button" onclick="closeMobileMoreDrawer(); logoutOwner()" class="w-full py-3 rounded-xl bg-red-600/20 border border-red-500/35 text-red-300 font-extrabold text-xs">Logout dari Panel Pemilik</button>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="toastBox" class="hidden fixed top-16 right-4 left-4 sm:left-auto sm:max-w-sm z-[200] px-4 py-3 rounded-2xl border shadow-2xl text-xs font-bold"></div>
+
+  <script>
+    /* =========================================================================
+       1. KONFIGURASI & STATE OWNER OS
+       ========================================================================= */
+    const INJECTED_BACKEND_URL = "__BACKEND_WEBAPP_URL__";
+    const INJECTED_ONESIGNAL_ID = "__ONESIGNAL_OWNER_APP_ID__";
+
+    const STORE = {
+      SESSION: "adbr_owner_session_v2",
+      BACKEND: "adbr_owner_backend_v2",
+      LOCAL_CACHE: "adbr_owner_cache_v2",
+      ONESIGNAL_PUSH: "adbr_owner_onesignal_blast_v2"
+    };
+
+    const loadJ = (k, fb) => { try { const r = localStorage.getItem(k); return r ? JSON.parse(r) : JSON.parse(JSON.stringify(fb)); } catch { return JSON.parse(JSON.stringify(fb)); } };
+    const saveJ = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
+
+    function cleanPlaceholder(s) {
+      return (!s || s.includes("__BACKEND_") || s.includes("__ONESIGNAL_")) ? "" : s.trim();
+    }
+
+    const owner = {
+      backendUrl: loadJ(STORE.BACKEND, "") || cleanPlaceholder(INJECTED_BACKEND_URL),
+      oneSignalOwnerAppId: cleanPlaceholder(INJECTED_ONESIGNAL_ID),
+      pushCfg: loadJ(STORE.ONESIGNAL_PUSH, { customerAppId: "", restApiKey: "" }),
+      session: loadJ(STORE.SESSION, null), // { token, user, previewMode }
+      tab: "dashboard",
+      uploadSubTab: "newContent",
+      videoSrcMode: "DIRECT",
+      pendingSubs: { id: "", ar: "" },
+      epPendingSubs: { id: "", ar: "" },
+      catSearch: "",
+      catFilter: "ALL",
+      payFilter: "ALL",
+      userFilter: "ALL",
+      userSearch: "",
+      data: loadJ(STORE.LOCAL_CACHE, {
+        catalog: [],
+        episodes: [],
+        settings: {},
+        users: [],
+        transactions: [],
+        promos: [{ code: "ARAB20", discountPct: 20, maxUses: 500, usedCount: 0, active: true, validUntil: "2028-12-31" }],
+        videoJobs: [],
+        driveLogs: [],
+        auditLogs: [],
+        notifications: [],
+        driveFiles: []
+      }),
+      connected: false,
+      lastSyncAt: null,
+      deferredPrompt: null
+    };
+
+    const esc = s => String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    const extractDriveId = v => {
+      const s = String(v || "").trim();
+      if (!s || /^DEMO_|^DIRECT_STREAM$/i.test(s)) return s;
+      const m1 = s.match(/\/file\/d\/([a-zA-Z0-9_-]{10,})/); if (m1) return m1[1];
+      const m2 = s.match(/[?&]id=([a-zA-Z0-9_-]{10,})/); if (m2) return m2[1];
+      return s;
+    };
+
+    function toast(msg, type = "info") {
+      const el = document.getElementById("toastBox");
+      if (!el) return;
+      const cls = {
+        success: "bg-emerald-600/95 border-emerald-400/50 text-white",
+        vip: "bg-amber-500/95 border-amber-300 text-black",
+        error: "bg-red-600/95 border-red-400/50 text-white",
+        info: "bg-[#192030]/95 border-white/15 text-white"
+      };
+      el.className = `fixed top-16 right-4 left-4 sm:left-auto sm:max-w-sm z-[200] px-4 py-3 rounded-2xl border shadow-2xl text-xs font-bold ${cls[type] || cls.info}`;
+      el.textContent = msg;
+      el.classList.remove("hidden");
+      clearTimeout(window.__oToast);
+      window.__oToast = setTimeout(() => el.classList.add("hidden"), 3400);
+    }
+
+    function copyClip(text, msg) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => toast(msg || "Disalin!", "success")).catch(() => fallbackCopy(text, msg));
+      } else fallbackCopy(text, msg);
+    }
+    function fallbackCopy(text, msg) {
+      const ta = document.createElement("textarea");
+      ta.value = text; ta.style.position = "fixed"; ta.style.left = "-9999px";
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); toast(msg || "Disalin!", "success"); } catch { toast("Gagal salin.", "error"); }
+      document.body.removeChild(ta);
+    }
+
+    /* =========================================================================
+       2. API BRIDGE KE GOOGLE APPS SCRIPT v4 (CORS-FREE TEXT/PLAIN)
+       ========================================================================= */
+    async function gasApi(path, body = {}, method = "POST") {
+      const base = String(owner.backendUrl || "").trim().replace(/\/+$/, "");
+      if (!base) throw new Error("URL Backend Google Apps Script belum diisi.");
+      const token = (owner.session && owner.session.token) || "";
+      const res = await fetch(base, {
+        method: "POST",
+        redirect: "follow",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ path, method, token, body })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.ok === false) throw new Error(data.error || ("Server HTTP " + res.status));
+      return data;
+    }
+
+    /* =========================================================================
+       3. AUTHENTICATION & SERVER SYNC
+       ========================================================================= */
+    async function handleOwnerLogin(e) {
+      e.preventDefault();
+      const url = document.getElementById("gateBackendUrl").value.trim().replace(/\/+$/, "");
+      const email = document.getElementById("gateEmail").value.trim().toLowerCase();
+      const password = document.getElementById("gatePassword").value;
+      const totpCode = document.getElementById("gateTotp").value.trim();
+
+      if (!url) { toast("Masukkan URL Web App Apps Script terlebih dahulu (atau pakai Mode Preview Lokal).", "error"); return; }
+
+      const btn = document.getElementById("gateSubmitBtn");
+      btn.disabled = true; btn.textContent = "Memverifikasi ke Server...";
+      owner.backendUrl = url;
+      saveJ(STORE.BACKEND, url);
+
+      try {
+        const resp = await gasApi("/api/auth/login", { email, password, totpCode });
+        const role = String((resp.user && resp.user.role) || "USER").toUpperCase();
+        if (role === "USER") throw new Error("Akun ini bukan akun Pemilik / Admin (Role: USER).");
+        owner.session = { token: resp.token, user: resp.user, previewMode: false };
+        saveJ(STORE.SESSION, owner.session);
+        launchOwnerShell();
+        await syncAllOwnerData(true);
+        toast(`Selamat datang, ${resp.user.displayName || email} (${role})!`, "success");
+      } catch (err) {
+        toast("Login gagal: " + err.message, "error");
+      } finally {
+        btn.disabled = false; btn.textContent = "Masuk ke Panel Pemilik →";
+      }
+    }
+
+    function enterLocalPreviewMode() {
+      owner.session = {
+        token: "",
+        previewMode: true,
+        user: { id: "local-owner", email: "owner@preview.local", displayName: "Pemilik (Preview Lokal)", role: "SUPER_ADMIN" }
+      };
+      saveJ(STORE.SESSION, owner.session);
+      if (!owner.data.catalog.length) {
+        owner.data.catalog = [
+          { id: "conan-ar", title: "Detective Conan (Dub Arab)", titleAr: "المحقق كونان", type: "anime", year: 2026, rating: "9.4", isVip: "FALSE", publishStatus: "PUBLISHED", genres: "Misteri, Dub Arab" },
+          { id: "the-journey-ar", title: "The Journey: Pasukan Gajah", titleAr: "الرحلة", type: "movie", year: 2026, rating: "9.2", isVip: "TRUE", publishStatus: "PUBLISHED", genres: "Sejarah, Epik" }
+        ];
+      }
+      launchOwnerShell();
+      toast("Masuk Mode Preview Lokal. Hubungkan URL Apps Script di Pengaturan untuk live sync!", "info");
+    }
+
+    function logoutOwner() {
+      owner.session = null;
+      saveJ(STORE.SESSION, null);
+      document.getElementById("ownerAppShell").classList.add("hidden");
+      document.getElementById("ownerLoginGate").classList.remove("hidden");
+      document.getElementById("gateBackendUrl").value = owner.backendUrl || "";
+      toast("Anda telah keluar dari Panel Pemilik.", "info");
+    }
+
+    function launchOwnerShell() {
+      document.getElementById("ownerLoginGate").classList.add("hidden");
+      document.getElementById("ownerAppShell").classList.remove("hidden");
+      const u = (owner.session && owner.session.user) || { displayName: "Pemilik", role: "SUPER_ADMIN" };
+      ["deskAdminName", "mobAdminName"].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = u.displayName || u.email; });
+      ["deskAdminRole", "mobAdminRole"].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = u.role || "SUPER_ADMIN"; });
+      updateStatusIndicators();
+      switchOwnerTab(owner.tab || "dashboard");
+      initOwnerOneSignal();
+    }
+
+    async function syncAllOwnerData(silent = true) {
+      if (!owner.backendUrl || (owner.session && owner.session.previewMode)) {
+        updateStatusIndicators();
+        if (!silent) toast("Mode Preview Lokal — isi URL Apps Script di tab Pengaturan untuk sinkronisasi live.", "info");
+        return;
+      }
+      const btn = document.getElementById("btnTopSync");
+      if (btn) { btn.disabled = true; btn.textContent = "↻ ..."; }
+      try {
+        const [boot, adm] = await Promise.all([
+          gasApi("/api/bootstrap", {}, "GET"),
+          gasApi("/api/admin/state", {}, "GET")
+        ]);
+        owner.connected = true;
+        owner.lastSyncAt = Date.now();
+        owner.data.catalog = Array.isArray(boot.catalog) ? boot.catalog : [];
+        owner.data.episodes = Array.isArray(boot.episodes) ? boot.episodes : [];
+        const sMap = {};
+        (boot.settings || []).forEach(r => { if (r && r.key) sMap[String(r.key).trim()] = String(r.value ?? "").trim(); });
+        owner.data.settings = sMap;
+        owner.data.users = adm.users || [];
+        owner.data.transactions = adm.transactions || [];
+        owner.data.promos = adm.promos || [];
+        owner.data.videoJobs = adm.videoJobs || [];
+        owner.data.driveLogs = adm.driveLogs || [];
+        owner.data.auditLogs = adm.auditLogs || [];
+        owner.data.notifications = adm.notifications || boot.notifications || [];
+        saveJ(STORE.LOCAL_CACHE, owner.data);
+        updateStatusIndicators();
+        renderActiveTab();
+        if (!silent) toast("Sinkronisasi server Apps Script berhasil!", "success");
+      } catch (err) {
+        owner.connected = false;
+        updateStatusIndicators();
+        if (!silent) toast("Sync gagal: " + err.message, "error");
+      } finally {
+        if (btn) { btn.disabled = false; btn.textContent = "↻ Sync"; }
+      }
+    }
+
+    function updateStatusIndicators() {
+      const dot = document.getElementById("serverStatusDot");
+      const lbl = document.getElementById("serverStatusLabel");
+      const pend = (owner.data.transactions || []).filter(t => ["PENDING", "WAITING_VERIFICATION"].includes(String(t.status).toUpperCase())).length;
+      ["deskPendingPayBadge", "mobPendingPayBadge"].forEach(id => {
+        const b = document.getElementById(id);
+        if (b) { b.textContent = String(pend); b.classList.toggle("hidden", pend === 0); }
+      });
+      if (!dot || !lbl) return;
+      if (owner.session && owner.session.previewMode) {
+        dot.className = "w-2 h-2 rounded-full bg-amber-400";
+        lbl.textContent = "Mode Preview Lokal";
+      } else if (owner.connected) {
+        dot.className = "w-2 h-2 rounded-full bg-emerald-400 animate-pulse";
+        lbl.textContent = "Terhubung Live · Sync " + (owner.lastSyncAt ? new Date(owner.lastSyncAt).toLocaleTimeString("id-ID") : "OK");
+      } else {
+        dot.className = "w-2 h-2 rounded-full bg-red-400";
+        lbl.textContent = "Offline / Belum Terhubung";
+      }
+    }
+
+    /* =========================================================================
+       4. NAVIGATION ROUTER
+       ========================================================================= */
+    const TAB_TITLES = {
+      dashboard: "Dashboard Pemilik",
+      upload: "Studio Upload Film & Anime Pro",
+      catalog: "Kelola Katalog & Episode",
+      payments: "Transaksi VIP, Promo & Voucher",
+      users: "Manajemen Akun & Staff RBAC",
+      broadcast: "Broadcast Notifikasi & OneSignal",
+      drive: "Google Drive Master & Video Jobs",
+      settings: "Pengaturan Brand, QRIS & Audit Log"
+    };
+
+    function switchOwnerTab(tab) {
+      owner.tab = tab;
+      document.getElementById("topPageTitle").textContent = TAB_TITLES[tab] || "Owner OS";
+      document.querySelectorAll(".onav-desk").forEach(b => {
+        const act = b.getAttribute("data-otab") === tab;
+        b.className = act
+          ? "onav-desk w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-emerald-600/20 text-emerald-300 border border-emerald-500/30"
+          : "onav-desk w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-zinc-300 hover:bg-white/5";
+      });
+      document.querySelectorAll(".onav-mob").forEach(b => {
+        const act = b.getAttribute("data-otab") === tab;
+        b.className = `onav-mob relative flex flex-col items-center gap-0.5 ${act ? "text-emerald-400" : "text-zinc-400"}`;
+      });
+      renderActiveTab();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function openMobileMoreDrawer() { document.getElementById("mobileMoreDrawer").classList.remove("hidden"); }
+    function closeMobileMoreDrawer() { document.getElementById("mobileMoreDrawer").classList.add("hidden"); }
+
+    function renderActiveTab() {
+      const ws = document.getElementById("ownerWorkspace");
+      if (!ws) return;
+      if (owner.tab === "dashboard") renderDashboard(ws);
+      else if (owner.tab === "upload") renderStudioUpload(ws);
+      else if (owner.tab === "catalog") renderCatalogManager(ws);
+      else if (owner.tab === "payments") renderPaymentsManager(ws);
+      else if (owner.tab === "users") renderUsersManager(ws);
+      else if (owner.tab === "broadcast") renderBroadcastManager(ws);
+      else if (owner.tab === "drive") renderDriveManager(ws);
+      else if (owner.tab === "settings") renderSettingsAudit(ws);
+    }
+
+    /* =========================================================================
+       5. TAB 1: DASHBOARD STATISTIK REAL-TIME
+       ========================================================================= */
+    function renderDashboard(ws) {
+      const cat = owner.data.catalog || [];
+      const eps = owner.data.episodes || [];
+      const users = owner.data.users || [];
+      const txs = owner.data.transactions || [];
+      const paidRev = txs.filter(t => String(t.status).toUpperCase() === "PAID").reduce((s, t) => s + Number(t.finalAmount || 0), 0);
+      const pendingTxs = txs.filter(t => ["PENDING", "WAITING_VERIFICATION"].includes(String(t.status).toUpperCase()));
+      const vipUsers = users.filter(u => String(u.tier).toUpperCase() === "VIP").length;
+
+      const kpis = [
+        { lbl: "Total Judul", val: cat.length, sub: `${cat.filter(c => c.type !== "movie").length} Anime · ${cat.filter(c => c.type === "movie").length} Film`, col: "text-white" },
+        { lbl: "Total Episode", val: eps.length, sub: "Siap Putar HD", col: "text-sky-400" },
+        { lbl: "Member VIP / Total", val: `${vipUsers} / ${users.length}`, sub: "Aktif di Server", col: "text-amber-400" },
+        { lbl: "Pendapatan (PAID)", val: "Rp " + paidRev.toLocaleString("id-ID"), sub: `${pendingTxs.length} Menunggu Konfirmasi`, col: "text-emerald-400" }
+      ];
+
+      ws.innerHTML = `
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          ${kpis.map(k => `
+            <div class="p-4 rounded-2xl bg-surface border border-white/10 space-y-1">
+              <p class="text-[11px] font-bold text-zinc-400 uppercase tracking-wider">${k.lbl}</p>
+              <p class="font-display font-black text-xl sm:text-2xl ${k.col}">${esc(k.val)}</p>
+              <p class="text-[11px] text-zinc-500">${esc(k.sub)}</p>
+            </div>`).join("")}
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs font-bold">
+          <button type="button" onclick="switchOwnerTab('upload')" class="p-3.5 rounded-2xl bg-brand/15 hover:bg-brand/25 border border-brand/35 text-white flex items-center gap-2.5 transition">
+            <span class="text-xl">🎬</span><span class="text-left">Upload Film /<br/>Anime Baru</span>
+          </button>
+          <button type="button" onclick="switchOwnerTab('payments')" class="p-3.5 rounded-2xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/35 text-amber-200 flex items-center gap-2.5 transition">
+            <span class="text-xl">✅</span><span class="text-left">Konfirmasi VIP<br/>(${pendingTxs.length} Pending)</span>
+          </button>
+          <button type="button" onclick="switchOwnerTab('broadcast')" class="p-3.5 rounded-2xl bg-sky-500/15 hover:bg-sky-500/25 border border-sky-500/35 text-sky-200 flex items-center gap-2.5 transition">
+            <span class="text-xl">📢</span><span class="text-left">Kirim Notif<br/>ke Pelanggan</span>
+          </button>
+          <button type="button" onclick="switchOwnerTab('users')" class="p-3.5 rounded-2xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/35 text-emerald-200 flex items-center gap-2.5 transition">
+            <span class="text-xl">👤</span><span class="text-left">Tambah Staff /<br/>Aktifkan VIP</span>
+          </button>
+        </div>
+
+        <!-- Pending Payment Queue & Latest Uploads -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div class="p-4 sm:p-5 rounded-2xl bg-surface border border-white/10 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-black text-white">Transaksi Menunggu Konfirmasi (${pendingTxs.length})</h3>
+              <button type="button" onclick="switchOwnerTab('payments')" class="text-xs font-bold text-amber-400">Lihat Semua →</button>
+            </div>
+            ${pendingTxs.length ? pendingTxs.slice(0, 5).map(t => `
+              <div class="p-3 rounded-xl bg-[#0c0f17] border border-amber-500/25 flex items-center justify-between gap-2 text-xs">
+                <div class="min-w-0">
+                  <p class="font-mono font-bold text-amber-300 truncate">${esc(t.invoiceNumber)}</p>
+                  <p class="text-[11px] text-zinc-400 truncate">${esc(t.userEmail)} · ${esc(t.planName)} · Rp ${Number(t.finalAmount||0).toLocaleString("id-ID")}</p>
+                </div>
+                <button type="button" onclick="confirmPaymentStatus('${esc(t.invoiceNumber)}','PAID')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold shrink-0">✔ Lunas</button>
+              </div>`).join("") : `<p class="py-6 text-center text-xs text-zinc-500">Semua pembayaran sudah diproses. Aman!</p>`}
+          </div>
+
+          <div class="p-4 sm:p-5 rounded-2xl bg-surface border border-white/10 space-y-3">
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-black text-white">Ringkasan Grafik Platform</h3>
+              <span class="text-[10px] font-bold text-emerald-400">LIVE DATA</span>
+            </div>
+            <canvas id="ownerDashChart" height="160" class="w-full"></canvas>
+          </div>
+        </div>`;
+
+      // Draw crisp Canvas bar chart
+      const c = document.getElementById("ownerDashChart");
+      if (c && c.getContext) {
+        const ctx = c.getContext("2d");
+        const w = c.width = c.offsetWidth || 400;
+        const h = c.height = 160;
+        const vals = [cat.length, eps.length, users.length, vipUsers, txs.length];
+        const lbls = ["Judul", "Episode", "Users", "VIP", "Invoice"];
+        const cols = ["#E50914", "#38BDF8", "#A78BFA", "#F59E0B", "#10B981"];
+        const max = Math.max(1, ...vals);
+        const bw = Math.max(24, Math.floor((w - 40) / vals.length) - 18);
+        vals.forEach((v, i) => {
+          const bh = Math.max(8, Math.round((v / max) * (h - 48)));
+          const x = 20 + i * (bw + 18);
+          const y = h - 24 - bh;
+          ctx.fillStyle = cols[i];
+          ctx.fillRect(x, y, bw, bh);
+          ctx.fillStyle = "#e4e4e7";
+          ctx.font = "bold 11px Inter, sans-serif";
+          ctx.fillText(String(v), x + 4, y - 6);
+          ctx.fillStyle = "#9ca3af";
+          ctx.font = "11px Inter, sans-serif";
+          ctx.fillText(lbls[i], x, h - 7);
+        });
+      }
+    }
+
+    /* =========================================================================
+       6. TAB 2: STUDIO UPLOAD PRO (DIRECT HLS/MP4 + GDRIVE + SUBTITLE + PREVIEW)
+       ========================================================================= */
+    function renderStudioUpload(ws) {
+      const cat = owner.data.catalog || [];
+      ws.innerHTML = `
+        <div class="inline-flex p-1 rounded-2xl bg-surface border border-white/10 text-xs font-extrabold">
+          <button type="button" onclick="owner.uploadSubTab='newContent'; renderActiveTab()" class="px-4 py-2 rounded-xl transition ${owner.uploadSubTab==='newContent' ? "bg-brand text-white" : "text-zinc-400 hover:text-white"}">1. Upload Anime / Film Baru</button>
+          <button type="button" onclick="owner.uploadSubTab='addEpisode'; renderActiveTab()" class="px-4 py-2 rounded-xl transition ${owner.uploadSubTab==='addEpisode' ? "bg-brand text-white" : "text-zinc-400 hover:text-white"}">2. Tambah Episode ke Serial</button>
+        </div>
+
+        ${owner.uploadSubTab === "newContent" ? `
+          <form onsubmit="submitNewContent(event)" class="p-4 sm:p-6 rounded-2xl bg-surface border border-white/10 space-y-5 text-xs">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+              <div class="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div class="sm:col-span-2">
+                  <label class="block text-zinc-300 font-bold mb-1">Judul Indonesia / Global *</label>
+                  <input id="upTitle" required oninput="updateLiveUploadCard()" placeholder="Contoh: Detective Conan (Dub Arab) SUB INDO" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white focus:border-brand focus:outline-none" />
+                </div>
+                <div>
+                  <label class="block text-zinc-300 font-bold mb-1">Kategori *</label>
+                  <select id="upType" onchange="updateLiveUploadCard()" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white">
+                    <option value="anime">Anime Dubbing Arab</option>
+                    <option value="movie">Film / Movie Arab</option>
+                  </select>
+                </div>
+                <div class="sm:col-span-2">
+                  <label class="block text-zinc-300 font-bold mb-1">Judul Bahasa Arab (العربية)</label>
+                  <input id="upArabic" dir="rtl" oninput="updateLiveUploadCard()" placeholder="المحقق كونان - مدبلج عربي" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-amber-300 font-arabic" />
+                </div>
+                <div>
+                  <label class="block text-zinc-300 font-bold mb-1">Tahun / Rating</label>
+                  <div class="grid grid-cols-2 gap-2">
+                    <input id="upYear" type="number" value="2026" class="h-10 rounded-xl bg-[#090b10] border border-white/10 px-2.5 text-white" />
+                    <input id="upRating" type="text" value="9.3" class="h-10 rounded-xl bg-[#090b10] border border-white/10 px-2.5 text-emerald-300" />
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-zinc-300 font-bold mb-1">Genre (pisahkan koma)</label>
+                  <input id="upGenres" value="Aksi, Petualangan, Dub Arab" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white" />
+                </div>
+                <div>
+                  <label class="block text-zinc-300 font-bold mb-1">URL Poster Vertikal (2:3)</label>
+                  <input id="upPoster" type="url" oninput="updateLiveUploadCard()" placeholder="https://.../poster.jpg" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white" />
+                </div>
+                <div>
+                  <label class="block text-zinc-300 font-bold mb-1">URL Backdrop Lebar (16:9)</label>
+                  <input id="upBackdrop" type="url" oninput="updateLiveUploadCard()" placeholder="https://.../backdrop.jpg" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white" />
+                </div>
+                <div class="sm:col-span-2 lg:col-span-3">
+                  <label class="block text-zinc-300 font-bold mb-1">Sinopsis</label>
+                  <textarea id="upSynopsis" rows="2" placeholder="Sinopsis singkat anime/film..." class="w-full rounded-xl bg-[#090b10] border border-white/10 p-3 text-white"></textarea>
+                </div>
+              </div>
+
+              <!-- Live Preview Card -->
+              <div class="lg:col-span-4 p-4 rounded-2xl bg-[#090b10] border border-white/10 flex flex-col items-center justify-center gap-2.5">
+                <span class="text-[10px] font-black uppercase tracking-widest text-zinc-500">LIVE PREVIEW DI APK PELANGGAN</span>
+                <div class="w-full max-w-[230px] rounded-xl bg-white text-[#18191C] overflow-hidden shadow-xl">
+                  <div id="upPrevThumb" class="relative aspect-video bg-gradient-to-br from-blue-700 to-slate-900 flex items-center justify-center">
+                    <span id="upPrevVip" class="hidden absolute top-2 left-2 px-2 py-0.5 rounded bg-[#FB7299] text-white text-[9px] font-extrabold">Premium</span>
+                    <span class="absolute bottom-1.5 right-2 px-1.5 py-0.5 rounded bg-black/75 text-white text-[10px] font-mono">24:00</span>
+                  </div>
+                  <div class="p-2.5 space-y-0.5">
+                    <p id="upPrevTitle" class="text-xs font-extrabold truncate">Judul Anime Baru</p>
+                    <p id="upPrevAr" dir="rtl" class="font-arabic text-[10px] text-[#00AEEC] truncate text-left">مدبلج عربي</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Video Source Switcher -->
+            <div class="p-4 rounded-2xl bg-[#0a0d14] border border-emerald-500/25 space-y-3.5">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <p class="font-extrabold text-amber-400 uppercase tracking-wider">Sumber Video (Otomatis Tampil di APK Pelanggan &amp; Website)</p>
+                <div class="inline-flex p-1 rounded-xl bg-black/60 border border-white/10 text-[11px] font-bold">
+                  <button type="button" onclick="owner.videoSrcMode='DIRECT'; toggleSrcPanes()" id="btnModeDir" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white">⚡ Direct .m3u8 / .mp4 (Netflix)</button>
+                  <button type="button" onclick="owner.videoSrcMode='GDRIVE'; toggleSrcPanes()" id="btnModeGdr" class="px-3 py-1.5 rounded-lg text-zinc-400">☁️ Google Drive Clean</button>
+                </div>
+              </div>
+
+              <div id="paneSrcDir" class="space-y-2">
+                <div class="flex flex-col sm:flex-row gap-2">
+                  <input id="upDirectUrl" type="url" placeholder="https://pub-xxx.r2.dev/ep1.m3u8 atau https://.../video.mp4" class="flex-1 h-10 rounded-xl bg-[#111520] border border-emerald-500/35 px-3 text-emerald-300 font-mono" />
+                  <button type="button" onclick="testOwnerPreviewPlayer()" class="px-4 h-10 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold shrink-0">▶ Uji Preview</button>
+                </div>
+              </div>
+
+              <div id="paneSrcGdr" class="hidden grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                <input id="upGdriveId" placeholder="Link / File ID GDrive Sub Indo" class="h-10 rounded-xl bg-[#111520] border border-white/10 px-3 text-white" />
+                <input id="upGdriveAr" placeholder="GDrive Sub Arab (Opsional)" class="h-10 rounded-xl bg-[#111520] border border-white/10 px-3 text-white" />
+                <input id="upGdriveDual" placeholder="GDrive Dual Sub (Opsional)" class="h-10 rounded-xl bg-[#111520] border border-white/10 px-3 text-white" />
+              </div>
+
+              <div id="ownerMiniPrevBox" class="hidden relative aspect-video max-h-60 rounded-xl overflow-hidden bg-black border border-white/15">
+                <button type="button" onclick="closeOwnerMiniPrev()" class="absolute top-2 right-2 z-20 px-2.5 py-1 rounded-lg bg-black/80 text-white text-[10px] font-bold">✕ Tutup</button>
+                <video id="ownerMiniVid" class="hidden w-full h-full object-contain" controls playsinline></video>
+                <iframe id="ownerMiniIfr" class="hidden w-full h-full border-0" allow="autoplay; fullscreen"></iframe>
+              </div>
+
+              <!-- Dual Subtitle Upload -->
+              <div class="pt-3 border-t border-white/10 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="p-3 rounded-xl bg-[#111520] border border-white/10 space-y-1.5">
+                  <label class="block font-bold text-zinc-200">Subtitle Indo (.ass/.srt/.vtt)</label>
+                  <input type="file" accept=".ass,.ssa,.srt,.vtt,.sbv,.sub,.txt" onchange="readOwnerSubFile(event,'id',false)" class="w-full text-[11px] text-zinc-300" />
+                  <input id="upSubIdUrl" type="url" placeholder="Atau URL file subtitle Indo" class="w-full h-8 rounded-lg bg-[#090b10] border border-white/10 px-2.5 text-[11px] text-white" />
+                </div>
+                <div class="p-3 rounded-xl bg-[#111520] border border-amber-500/20 space-y-1.5">
+                  <label class="block font-bold text-amber-300">Subtitle Arab (.ass/.srt/.vtt)</label>
+                  <input type="file" accept=".ass,.ssa,.srt,.vtt,.sbv,.sub,.txt" onchange="readOwnerSubFile(event,'ar',false)" class="w-full text-[11px] text-amber-300" />
+                  <input id="upSubArUrl" type="url" placeholder="Atau URL file subtitle Arab" class="w-full h-8 rounded-lg bg-[#090b10] border border-white/10 px-2.5 text-[11px] text-amber-300" />
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div class="flex flex-wrap items-center gap-4">
+                <label class="inline-flex items-center gap-2 cursor-pointer"><input id="upIsVip" type="checkbox" onchange="updateLiveUploadCard()" class="w-4 h-4 accent-[#F59E0B]" /><span class="text-amber-300 font-bold">Konten Premium VIP</span></label>
+                <label class="inline-flex items-center gap-2 cursor-pointer"><input id="upFeatured" type="checkbox" class="w-4 h-4 accent-[#E50914]" /><span>Tampilkan di Hero</span></label>
+                <label class="inline-flex items-center gap-2"><span>Top 10:</span><input id="upTopRank" type="number" min="0" max="10" value="0" class="w-14 h-8 rounded-lg bg-[#090b10] border border-white/10 px-2 text-white" /></label>
+              </div>
+              <button id="btnPublishNew" type="submit" class="px-6 py-3 rounded-xl bg-brand hover:brightness-110 text-white font-black text-xs sm:text-sm shadow-lg shadow-brand/30 transition">
+                🚀 Publish ke APK Pelanggan &amp; Website
+              </button>
+            </div>
+          </form>
+        ` : `
+          <form onsubmit="submitNewEpisode(event)" class="p-4 sm:p-6 rounded-2xl bg-surface border border-white/10 space-y-4 text-xs">
+            <h3 class="text-sm font-black text-white">Tambah Episode Baru ke Serial yang Sudah Ada</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <div class="sm:col-span-2">
+                <label class="block text-zinc-300 font-bold mb-1">Pilih Judul Serial *</label>
+                <select id="epTargetId" required class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white">
+                  ${cat.map(c => `<option value="${esc(c.id)}">${esc(c.title)}</option>`).join("") || '<option value="">Belum ada judul di katalog</option>'}
+                </select>
+              </div>
+              <div>
+                <label class="block text-zinc-300 font-bold mb-1">No. Episode *</label>
+                <input id="epNumber" type="number" min="1" value="2" required class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white" />
+              </div>
+              <div>
+                <label class="block text-zinc-300 font-bold mb-1">Durasi</label>
+                <input id="epDuration" value="24:00" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white" />
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-zinc-300 font-bold mb-1">Judul Episode *</label>
+                <input id="epTitle" required placeholder="Contoh: Pertarungan di Gurun" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white" />
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-emerald-300 font-bold mb-1">Direct Video URL (.m3u8 / .mp4)</label>
+                <input id="epDirectUrl" type="url" placeholder="https://.../ep2.m3u8 atau ep2.mp4" class="w-full h-10 rounded-xl bg-[#090b10] border border-emerald-500/30 px-3 text-emerald-300 font-mono" />
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-zinc-300 font-bold mb-1">Atau GDrive Sub Indo (Link / File ID)</label>
+                <input id="epDriveSubId" placeholder="Link / File ID Google Drive" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white" />
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-zinc-300 font-bold mb-1">GDrive Sub Arab (Opsional)</label>
+                <input id="epDriveSubAr" placeholder="Link / File ID Google Drive" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white" />
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-zinc-300 mb-1">Upload Subtitle Indo (.ass/.srt/.vtt)</label>
+                <input type="file" accept=".ass,.ssa,.srt,.vtt,.sbv,.sub,.txt" onchange="readOwnerSubFile(event,'id',true)" class="w-full text-[11px]" />
+              </div>
+              <div class="sm:col-span-2">
+                <label class="block text-amber-300 mb-1">Upload Subtitle Arab (.ass/.srt/.vtt)</label>
+                <input type="file" accept=".ass,.ssa,.srt,.vtt,.sbv,.sub,.txt" onchange="readOwnerSubFile(event,'ar',true)" class="w-full text-[11px] text-amber-300" />
+              </div>
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+              <label class="inline-flex items-center gap-2 cursor-pointer"><input id="epIsVip" type="checkbox" class="w-4 h-4 accent-[#F59E0B]" /><span class="text-amber-300 font-bold">Kunci Episode untuk Premium VIP</span></label>
+              <button id="btnPublishEp" type="submit" class="px-6 py-3 rounded-xl owner-gradient text-black font-black shadow-lg">+ Publish Episode Baru</button>
+            </div>
+          </form>
+        `}`;
+      toggleSrcPanes();
+    }
+
+    function toggleSrcPanes() {
+      const d = owner.videoSrcMode === "DIRECT";
+      const bd = document.getElementById("btnModeDir"), bg = document.getElementById("btnModeGdr");
+      const pd = document.getElementById("paneSrcDir"), pg = document.getElementById("paneSrcGdr");
+      if (bd) bd.className = d ? "px-3 py-1.5 rounded-lg bg-emerald-600 text-white" : "px-3 py-1.5 rounded-lg text-zinc-400";
+      if (bg) bg.className = !d ? "px-3 py-1.5 rounded-lg bg-amber-500 text-black" : "px-3 py-1.5 rounded-lg text-zinc-400";
+      if (pd) pd.classList.toggle("hidden", !d);
+      if (pg) pg.classList.toggle("hidden", d);
+    }
+
+    function updateLiveUploadCard() {
+      const t = (document.getElementById("upTitle") || {}).value || "Judul Anime Baru";
+      const a = (document.getElementById("upArabic") || {}).value || "مدبلج عربي";
+      const img = ((document.getElementById("upBackdrop") || {}).value || (document.getElementById("upPoster") || {}).value || "").trim();
+      const vip = Boolean((document.getElementById("upIsVip") || {}).checked);
+      const tEl = document.getElementById("upPrevTitle"); if (tEl) tEl.textContent = t;
+      const aEl = document.getElementById("upPrevAr"); if (aEl) aEl.textContent = a;
+      const vEl = document.getElementById("upPrevVip"); if (vEl) vEl.classList.toggle("hidden", !vip);
+      const th = document.getElementById("upPrevThumb");
+      if (th) {
+        const old = th.querySelector("img"); if (old) old.remove();
+        if (img) { const im = document.createElement("img"); im.src = img; im.className = "absolute inset-0 w-full h-full object-cover"; im.onerror = () => im.remove(); th.prepend(im); }
+      }
+    }
+
+    function testOwnerPreviewPlayer() {
+      const box = document.getElementById("ownerMiniPrevBox");
+      const v = document.getElementById("ownerMiniVid");
+      const ifr = document.getElementById("ownerMiniIfr");
+      const url = ((document.getElementById("upDirectUrl") || {}).value || "").trim();
+      const gid = extractDriveId((document.getElementById("upGdriveId") || {}).value || "");
+      v.classList.add("hidden"); ifr.classList.add("hidden");
+      v.pause(); v.removeAttribute("src"); ifr.src = "";
+      if (owner.videoSrcMode === "DIRECT" && url) {
+        box.classList.remove("hidden"); v.classList.remove("hidden");
+        if (window.Hls && window.Hls.isSupported() && url.includes(".m3u8")) {
+          if (window.__oMiniHls) window.__oMiniHls.destroy();
+          window.__oMiniHls = new window.Hls();
+          window.__oMiniHls.loadSource(url);
+          window.__oMiniHls.attachMedia(v);
+        } else v.src = url;
+        v.play().catch(()=>{});
+      } else if (gid && !/^DEMO_/i.test(gid)) {
+        box.classList.remove("hidden"); ifr.classList.remove("hidden");
+        ifr.src = `https://drive.google.com/file/d/${encodeURIComponent(gid)}/preview`;
+      } else toast("Isi Direct Video URL atau Link GDrive terlebih dahulu.", "info");
+    }
+
+    function closeOwnerMiniPrev() {
+      if (window.__oMiniHls) { window.__oMiniHls.destroy(); window.__oMiniHls = null; }
+      const v = document.getElementById("ownerMiniVid"); if (v) { v.pause(); v.removeAttribute("src"); }
+      const ifr = document.getElementById("ownerMiniIfr"); if (ifr) ifr.src = "";
+      document.getElementById("ownerMiniPrevBox").classList.add("hidden");
+    }
+
+    function readOwnerSubFile(evt, lang, isEp) {
+      const f = evt.target.files && evt.target.files[0]; if (!f) return;
+      const r = new FileReader();
+      r.onload = () => {
+        const txt = String(r.result || "").slice(0, 45000);
+        if (isEp) owner.epPendingSubs[lang] = txt;
+        else owner.pendingSubs[lang] = txt;
+        toast(`Subtitle ${lang.toUpperCase()} (${f.name}) siap dikirim ke server!`, "success");
+      };
+      r.readAsText(f, "UTF-8");
+    }
+
+    async function submitNewContent(e) {
+      e.preventDefault();
+      const title = document.getElementById("upTitle").value.trim();
+      const type = document.getElementById("upType").value;
+      const directUrl = ((document.getElementById("upDirectUrl") || {}).value || "").trim();
+      const gId = extractDriveId((document.getElementById("upGdriveId") || {}).value || "") || (directUrl ? "DIRECT_STREAM" : ("DEMO_" + Date.now()));
+      const gAr = extractDriveId((document.getElementById("upGdriveAr") || {}).value || "") || gId;
+      const gDual = extractDriveId((document.getElementById("upGdriveDual") || {}).value || "") || gId;
+      const isVip = document.getElementById("upIsVip").checked;
+      const id = "item-" + Date.now();
+
+      const item = {
+        id, slug: id, title,
+        arabicTitle: document.getElementById("upArabic").value.trim() || "مدبلج عربي",
+        type, kind: type === "movie" ? "MOVIE" : "ANIME",
+        year: Number(document.getElementById("upYear").value) || 2026,
+        rating: document.getElementById("upRating").value.trim() || "9.2",
+        genres: document.getElementById("upGenres").value.split(",").map(s => s.trim()).filter(Boolean),
+        posterUrl: document.getElementById("upPoster").value.trim(),
+        backdropUrl: document.getElementById("upBackdrop").value.trim(),
+        synopsis: document.getElementById("upSynopsis").value.trim(),
+        isVip, featured: document.getElementById("upFeatured").checked,
+        topRank: Number(document.getElementById("upTopRank").value) || null,
+        publishStatus: "PUBLISHED",
+        seasons: [{ seasonNumber: 1, title: type === "movie" ? "Movie" : "S1", episodes: [{
+          ep: 1, title: type === "movie" ? title : "Episode 1", duration: type === "movie" ? "01:45:00" : "24:00",
+          isVip, driveSubId: gId, driveSubAr: gAr, driveDual: gDual,
+          hlsUrl: directUrl, videoSourceType: directUrl ? "DIRECT" : "GDRIVE",
+          subIdUrl: document.getElementById("upSubIdUrl").value.trim(),
+          subArUrl: document.getElementById("upSubArUrl").value.trim(),
+          subIdText: owner.pendingSubs.id, subArText: owner.pendingSubs.ar
+        }]}]
+      };
+
+      const btn = document.getElementById("btnPublishNew");
+      btn.disabled = true; btn.textContent = "Mengirim ke Server...";
+      try {
+        if (owner.backendUrl && !(owner.session && owner.session.previewMode)) {
+          await gasApi("/api/admin/contents", { item });
+          await syncAllOwnerData(true);
+          toast(`"${title}" LIVE! Otomatis tampil di APK Pelanggan & Website!`, "vip");
+        } else {
+          owner.data.catalog.unshift({ id, title, titleAr: item.arabicTitle, type, year: item.year, rating: item.rating, isVip: isVip ? "TRUE" : "FALSE", publishStatus: "PUBLISHED" });
+          saveJ(STORE.LOCAL_CACHE, owner.data);
+          toast(`"${title}" disimpan di Preview Lokal.`, "info");
+        }
+        owner.pendingSubs = { id: "", ar: "" };
+        e.target.reset();
+        closeOwnerMiniPrev();
+      } catch (err) {
+        toast("Gagal publish: " + err.message, "error");
+      } finally {
+        btn.disabled = false; btn.textContent = "🚀 Publish ke APK Pelanggan & Website";
+      }
+    }
+
+    async function submitNewEpisode(e) {
+      e.preventDefault();
+      const contentId = document.getElementById("epTargetId").value;
+      const item = (owner.data.catalog || []).find(c => c.id === contentId);
+      const directUrl = document.getElementById("epDirectUrl").value.trim();
+      const driveSubId = extractDriveId(document.getElementById("epDriveSubId").value) || (directUrl ? "DIRECT_STREAM" : "");
+      if (!directUrl && !driveSubId) { toast("Isi Direct Video URL atau Link Google Drive.", "error"); return; }
+
+      const payload = {
+        contentId, contentTitle: item ? item.title : contentId,
+        epNumber: Number(document.getElementById("epNumber").value) || 2,
+        title: document.getElementById("epTitle").value.trim(),
+        duration: document.getElementById("epDuration").value.trim() || "24:00",
+        isVip: document.getElementById("epIsVip").checked,
+        driveSubId, driveSubAr: extractDriveId(document.getElementById("epDriveSubAr").value) || driveSubId,
+        hlsUrl: directUrl, videoSourceType: directUrl ? "DIRECT" : "GDRIVE",
+        subIdText: owner.epPendingSubs.id, subArText: owner.epPendingSubs.ar
+      };
+
+      const btn = document.getElementById("btnPublishEp");
+      btn.disabled = true; btn.textContent = "Menyimpan...";
+      try {
+        if (owner.backendUrl && !(owner.session && owner.session.previewMode)) {
+          await gasApi("/api/admin/episodes", payload);
+          await syncAllOwnerData(true);
+          toast(`Episode ${payload.epNumber} LIVE & notifikasi terkirim ke Pelanggan!`, "vip");
+        } else {
+          owner.data.episodes.push(payload);
+          saveJ(STORE.LOCAL_CACHE, owner.data);
+          toast("Episode disimpan di Preview Lokal.", "info");
+        }
+        owner.epPendingSubs = { id: "", ar: "" };
+        e.target.reset();
+      } catch (err) {
+        toast("Gagal tambah episode: " + err.message, "error");
+      } finally {
+        btn.disabled = false; btn.textContent = "+ Publish Episode Baru";
+      }
+    }
+
+    /* =========================================================================
+       7. TAB 3: KELOLA KATALOG & EPISODE
+       ========================================================================= */
+    function renderCatalogManager(ws) {
+      const q = owner.catSearch.toLowerCase();
+      const list = (owner.data.catalog || []).filter(c => {
+        const isVip = String(c.isVip).toUpperCase() === "TRUE";
+        if (owner.catFilter === "ANIME" && c.type === "movie") return false;
+        if (owner.catFilter === "MOVIE" && c.type !== "movie") return false;
+        if (owner.catFilter === "VIP" && !isVip) return false;
+        if (q && !(String(c.title||"").toLowerCase().includes(q) || String(c.titleAr||"").toLowerCase().includes(q))) return false;
+        return true;
+      });
+
+      ws.innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div class="flex flex-wrap gap-1.5">
+            ${["ALL","ANIME","MOVIE","VIP"].map(f => `<button type="button" onclick="owner.catFilter='${f}'; renderActiveTab()" class="px-3 py-1.5 rounded-xl font-bold ${owner.catFilter===f ? "bg-brand text-white" : "bg-surface text-zinc-300 border border-white/10"}">${f}</button>`).join("")}
+          </div>
+          <input value="${esc(owner.catSearch)}" oninput="owner.catSearch=this.value; renderActiveTab()" placeholder="Cari judul katalog..." class="h-9 rounded-xl bg-surface border border-white/10 px-3 text-white w-full sm:w-60 focus:outline-none focus:border-brand" />
+        </div>
+
+        <div class="space-y-2.5 text-xs">
+          ${list.length ? list.map(c => {
+            const epCnt = (owner.data.episodes || []).filter(e => String(e.contentId) === String(c.id)).length;
+            const isVip = String(c.isVip).toUpperCase() === "TRUE";
+            const pub = String(c.publishStatus || "PUBLISHED").toUpperCase();
+            return `
+              <div class="p-3.5 rounded-2xl bg-surface border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="min-w-0 space-y-0.5">
+                  <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="font-extrabold text-sm text-white truncate">${esc(c.title)}</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-black ${isVip ? "vip-gradient text-black" : "bg-emerald-500/20 text-emerald-300"}">${isVip ? "VIP" : "GRATIS"}</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold ${pub==="PUBLISHED" ? "bg-sky-500/20 text-sky-300" : "bg-zinc-700 text-zinc-300"}">${pub}</span>
+                  </div>
+                  <p class="text-[11px] text-zinc-400"><span dir="rtl" class="font-arabic text-amber-300">${esc(c.titleAr || "")}</span> · ${c.type==="movie" ? "Film" : "Anime"} · ${epCnt} Episode · ID: <span class="font-mono">${esc(c.id)}</span></p>
+                </div>
+                <div class="flex flex-wrap gap-1.5 shrink-0">
+                  <button type="button" onclick="updateCatalogStatus('${esc(c.id)}','${pub==="PUBLISHED" ? "ARCHIVED" : "PUBLISHED"}')" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white font-bold">${pub==="PUBLISHED" ? "Arsipkan" : "Publish"}</button>
+                  <button type="button" onclick="deleteContentRemote('${esc(c.id)}','${esc(c.title)}')" class="px-3 py-1.5 rounded-lg bg-red-600/20 hover:bg-red-600 text-red-300 hover:text-white font-bold">Hapus</button>
+                </div>
+              </div>`;
+          }).join("") : `<div class="p-10 rounded-2xl bg-surface border border-white/10 text-center text-zinc-500">Belum ada konten di filter ini.</div>`}
+        </div>`;
+    }
+
+    async function updateCatalogStatus(id, publishStatus) {
+      try {
+        if (owner.backendUrl && !(owner.session && owner.session.previewMode)) {
+          await gasApi("/api/admin/contents/" + encodeURIComponent(id) + "/status", { publishStatus });
+        }
+        const it = owner.data.catalog.find(c => c.id === id);
+        if (it) it.publishStatus = publishStatus;
+        saveJ(STORE.LOCAL_CACHE, owner.data);
+        renderActiveTab();
+        toast(`Status diubah menjadi ${publishStatus}.`, "success");
+      } catch (err) { toast("Gagal: " + err.message, "error"); }
+    }
+
+    async function deleteContentRemote(id, title) {
+      if (!confirm(`Hapus "${title}" beserta seluruh episodenya dari server?`)) return;
+      try {
+        if (owner.backendUrl && !(owner.session && owner.session.previewMode)) {
+          await gasApi("/api/admin/contents/" + encodeURIComponent(id) + "/delete", {});
+        }
+        owner.data.catalog = owner.data.catalog.filter(c => c.id !== id);
+        owner.data.episodes = owner.data.episodes.filter(e => e.contentId !== id);
+        saveJ(STORE.LOCAL_CACHE, owner.data);
+        renderActiveTab();
+        toast(`"${title}" telah dihapus dari server.`, "info");
+      } catch (err) { toast("Gagal hapus: " + err.message, "error"); }
+    }
+
+    /* =========================================================================
+       8. TAB 4: TRANSAKSI VIP, KONFIRMASI BAYAR & PROMO
+       ========================================================================= */
+    function renderPaymentsManager(ws) {
+      const txs = (owner.data.transactions || []).filter(t => owner.payFilter === "ALL" || String(t.status).toUpperCase() === owner.payFilter);
+      const promos = owner.data.promos || [];
+      ws.innerHTML = `
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 text-xs">
+          <!-- Transactions List -->
+          <div class="lg:col-span-8 space-y-3">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <h3 class="text-sm font-black text-white">Daftar Pembayaran &amp; Invoice Pelanggan (${txs.length})</h3>
+              <div class="flex flex-wrap gap-1">
+                ${["ALL","PENDING","WAITING_VERIFICATION","PAID","REFUNDED"].map(st => `<button type="button" onclick="owner.payFilter='${st}'; renderActiveTab()" class="px-2.5 py-1 rounded-lg font-bold text-[11px] ${owner.payFilter===st ? "bg-amber-500 text-black" : "bg-surface text-zinc-400 border border-white/10"}">${st}</button>`).join("")}
+              </div>
+            </div>
+            <div class="space-y-2.5">
+              ${txs.length ? txs.map(t => {
+                const st = String(t.status || "PENDING").toUpperCase();
+                return `
+                  <div class="p-3.5 rounded-2xl bg-surface border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div class="space-y-0.5 min-w-0">
+                      <div class="flex flex-wrap items-center gap-2">
+                        <span class="font-mono font-bold text-amber-300">${esc(t.invoiceNumber)}</span>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-black ${st==="PAID" ? "bg-emerald-500/20 text-emerald-300" : st==="REFUNDED" ? "bg-red-500/20 text-red-300" : "bg-amber-500/20 text-amber-300"}">${st}</span>
+                      </div>
+                      <p class="text-zinc-300 font-semibold">${esc(t.userEmail || "-")} · ${esc(t.planName)} (${esc(t.method)})</p>
+                      <p class="text-[11px] text-emerald-400 font-bold">Rp ${Number(t.finalAmount||0).toLocaleString("id-ID")}</p>
+                    </div>
+                    <div class="flex flex-wrap gap-1.5 shrink-0">
+                      ${st !== "PAID" ? `<button type="button" onclick="confirmPaymentStatus('${esc(t.invoiceNumber)}','PAID')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold">✔ Konfirmasi Lunas</button>` : ""}
+                      ${st !== "REFUNDED" ? `<button type="button" onclick="confirmPaymentStatus('${esc(t.invoiceNumber)}','REFUNDED')" class="px-3 py-1.5 rounded-lg bg-red-600/20 text-red-300 font-bold">Refund</button>` : ""}
+                    </div>
+                  </div>`;
+              }).join("") : `<div class="p-8 rounded-2xl bg-surface border border-white/10 text-center text-zinc-500">Belum ada transaksi pada filter ini.</div>`}
+            </div>
+          </div>
+
+          <!-- Promo Code Manager -->
+          <div class="lg:col-span-4 space-y-3">
+            <form onsubmit="submitNewPromo(event)" class="p-4 rounded-2xl bg-surface border border-amber-500/25 space-y-3">
+              <h3 class="text-sm font-black text-amber-400">+ Buat Kode Promo Diskon</h3>
+              <input id="prCode" required placeholder="KODE PROMO (mis: RAMADAN25)" oninput="this.value=this.value.toUpperCase()" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 font-mono font-bold text-amber-300 uppercase" />
+              <div class="grid grid-cols-2 gap-2">
+                <input id="prPct" type="number" min="1" max="100" value="20" placeholder="Diskon %" class="h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white" />
+                <input id="prMax" type="number" min="1" value="500" placeholder="Kuota" class="h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white" />
+              </div>
+              <button type="submit" class="w-full py-2.5 rounded-xl vip-gradient text-black font-black">Simpan Kode Promo</button>
+            </form>
+
+            <div class="p-4 rounded-2xl bg-surface border border-white/10 space-y-2">
+              <h4 class="font-extrabold text-white">Promo Aktif (${promos.length})</h4>
+              ${promos.map(p => `
+                <div class="p-2.5 rounded-xl bg-[#090b10] border border-white/5 flex items-center justify-between">
+                  <span class="font-mono font-bold text-amber-300">${esc(p.code)}</span>
+                  <span class="text-emerald-300 font-bold">Diskon ${p.discountPct}%</span>
+                </div>`).join("") || '<p class="text-zinc-500">Belum ada promo.</p>'}
+            </div>
+          </div>
+        </div>`;
+    }
+
+    async function confirmPaymentStatus(inv, status) {
+      try {
+        if (owner.backendUrl && !(owner.session && owner.session.previewMode)) {
+          await gasApi("/api/admin/payments/" + encodeURIComponent(inv) + "/status", { status });
+        }
+        const tx = owner.data.transactions.find(t => t.invoiceNumber === inv);
+        if (tx) tx.status = status;
+        saveJ(STORE.LOCAL_CACHE, owner.data);
+        updateStatusIndicators();
+        renderActiveTab();
+        toast(`Invoice ${inv} → ${status}! ${status==="PAID" ? "VIP pelanggan otomatis aktif!" : ""}`, "vip");
+      } catch (err) { toast("Gagal update invoice: " + err.message, "error"); }
+    }
+
+    async function submitNewPromo(e) {
+      e.preventDefault();
+      const code = document.getElementById("prCode").value.trim().toUpperCase();
+      const discountPct = Number(document.getElementById("prPct").value) || 20;
+      const maxUses = Number(document.getElementById("prMax").value) || 500;
+      try {
+        if (owner.backendUrl && !(owner.session && owner.session.previewMode)) {
+          await gasApi("/api/admin/promos", { code, discountPct, maxUses, validUntil: "2028-12-31" });
+        }
+        owner.data.promos.unshift({ code, discountPct, maxUses, usedCount: 0, active: true });
+        saveJ(STORE.LOCAL_CACHE, owner.data);
+        e.target.reset();
+        renderActiveTab();
+        toast(`Kode promo ${code} (${discountPct}%) aktif!`, "vip");
+      } catch (err) { toast("Gagal buat promo: " + err.message, "error"); }
+    }
+
+    /* =========================================================================
+       9. TAB 5: MANAJEMEN AKUN & STAFF RBAC
+       ========================================================================= */
+    function renderUsersManager(ws) {
+      const q = owner.userSearch.toLowerCase();
+      const roles = ["USER","SUPER_ADMIN","CONTENT_ADMIN","VIDEO_MANAGER","MEMBERSHIP_ADMIN","FINANCE_ADMIN","MODERATOR","ANALYTICS_VIEWER"];
+      const list = (owner.data.users || []).filter(u => {
+        const r = String(u.role || "USER").toUpperCase();
+        if (owner.userFilter === "ADMIN" && r === "USER") return false;
+        if (owner.userFilter === "VIP" && u.tier !== "VIP") return false;
+        if (owner.userFilter === "FREE" && u.tier === "VIP") return false;
+        if (owner.userFilter === "SUSPENDED" && u.status !== "SUSPENDED") return false;
+        if (q && !(String(u.email||"").toLowerCase().includes(q) || String(u.displayName||"").toLowerCase().includes(q))) return false;
+        return true;
+      });
+
+      ws.innerHTML = `
+        <form onsubmit="submitCreateUser(event)" class="p-4 sm:p-5 rounded-2xl bg-surface border border-emerald-500/25 space-y-3 text-xs">
+          <h3 class="text-sm font-black text-emerald-400">+ Tambah Akun Baru (Staff Admin / Pelanggan VIP)</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+            <input id="uName" required placeholder="Nama Tampilan *" class="h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white" />
+            <input id="uEmail" type="email" required placeholder="Email Akun *" class="h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white" />
+            <input id="uPass" type="password" minlength="8" required placeholder="Password (min. 8 kar) *" class="h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white" />
+            <select id="uRole" class="h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-amber-300 font-bold">
+              ${roles.map(r => `<option value="${r}">${r==="USER" ? "Pelanggan (USER)" : "Staff: " + r}</option>`).join("")}
+            </select>
+            <select id="uTier" class="h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white">
+              <option value="VIP">Tier: VIP Aktif</option><option value="FREE">Tier: FREE</option>
+            </select>
+            <input id="uDays" type="number" min="1" value="30" placeholder="Durasi VIP (Hari)" class="h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white" />
+            <input id="uTotp" placeholder="Kode 2FA Admin (Opsional)" class="h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-emerald-300 font-mono" />
+            <button type="submit" class="h-10 rounded-xl owner-gradient text-black font-black">+ Simpan Akun</button>
+          </div>
+        </form>
+
+        <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div class="flex flex-wrap gap-1.5">
+            ${["ALL","ADMIN","VIP","FREE","SUSPENDED"].map(f => `<button type="button" onclick="owner.userFilter='${f}'; renderActiveTab()" class="px-3 py-1.5 rounded-xl font-bold ${owner.userFilter===f ? "bg-brand text-white" : "bg-surface text-zinc-300 border border-white/10"}">${f}</button>`).join("")}
+          </div>
+          <input value="${esc(owner.userSearch)}" oninput="owner.userSearch=this.value; renderActiveTab()" placeholder="Cari email / nama..." class="h-9 rounded-xl bg-surface border border-white/10 px-3 text-white w-full sm:w-60" />
+        </div>
+
+        <div class="space-y-2.5 text-xs">
+          ${list.length ? list.map(u => {
+            const r = String(u.role || "USER").toUpperCase();
+            return `
+              <div class="p-3.5 rounded-2xl bg-surface border ${r!=="USER" ? "border-amber-500/30" : "border-white/10"} flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="min-w-0">
+                  <div class="flex flex-wrap items-center gap-1.5">
+                    <span class="font-extrabold text-sm text-white">${esc(u.displayName)}</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-black ${r!=="USER" ? "bg-brand/25 text-brand" : "bg-white/10 text-zinc-300"}">${r}</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-black ${u.tier==="VIP" ? "vip-gradient text-black" : "bg-zinc-700 text-zinc-200"}">${esc(u.tier||"FREE")}</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold ${u.status==="ACTIVE" ? "bg-emerald-500/20 text-emerald-300" : "bg-red-500/20 text-red-300"}">${esc(u.status||"ACTIVE")}</span>
+                  </div>
+                  <p class="text-[11px] text-zinc-400 mt-0.5">${esc(u.email)} ${u.vipExpiresAt ? "· VIP s/d " + String(u.vipExpiresAt).slice(0,10) : ""}</p>
+                </div>
+                <div class="flex flex-wrap gap-1.5 shrink-0">
+                  <button type="button" onclick="patchUser('${esc(u.id)}',{tier:'VIP',status:'ACTIVE',days:30})" class="px-2.5 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 font-bold">+30h VIP</button>
+                  <button type="button" onclick="patchUser('${esc(u.id)}',{tier:'FREE'})" class="px-2.5 py-1.5 rounded-lg bg-white/10 text-zinc-200 font-bold">Set FREE</button>
+                  <button type="button" onclick="patchUser('${esc(u.id)}',{status:'${u.status==="ACTIVE" ? "SUSPENDED" : "ACTIVE"}'})" class="px-2.5 py-1.5 rounded-lg bg-white/10 text-zinc-200 font-bold">${u.status==="ACTIVE" ? "Suspend" : "Aktifkan"}</button>
+                  <button type="button" onclick="removeUser('${esc(u.id)}','${esc(u.email)}')" class="px-2.5 py-1.5 rounded-lg bg-red-600/20 text-red-300 font-bold">Hapus</button>
+                </div>
+              </div>`;
+          }).join("") : `<div class="p-8 rounded-2xl bg-surface border border-white/10 text-center text-zinc-500">Belum ada akun di filter ini.</div>`}
+        </div>`;
+    }
+
+    async function submitCreateUser(e) {
+      e.preventDefault();
+      const body = {
+        displayName: document.getElementById("uName").value.trim(),
+        email: document.getElementById("uEmail").value.trim().toLowerCase(),
+        password: document.getElementById("uPass").value,
+        role: document.getElementById("uRole").value,
+        tier: document.getElementById("uTier").value,
+        days: Number(document.getElementById("uDays").value) || 30,
+        totpSecret: document.getElementById("uTotp").value.trim()
+      };
+      try {
+        if (owner.backendUrl && !(owner.session && owner.session.previewMode)) {
+          const r = await gasApi("/api/admin/users", body);
+          if (r.user) owner.data.users.unshift(r.user);
+        } else {
+          owner.data.users.unshift({ id: "u-" + Date.now(), ...body, status: "ACTIVE" });
+        }
+        saveJ(STORE.LOCAL_CACHE, owner.data);
+        e.target.reset();
+        renderActiveTab();
+        toast(`Akun ${body.email} berhasil dibuat!`, "success");
+      } catch (err) { toast("Gagal buat akun: " + err.message, "error"); }
+    }
+
+    async function patchUser(uid, patch) {
+      try {
+        if (owner.backendUrl && !(owner.session && owner.session.previewMode)) {
+          await gasApi("/api/admin/users/" + encodeURIComponent(uid) + "/update", patch);
+        }
+        const u = owner.data.users.find(x => x.id === uid);
+        if (u) Object.assign(u, patch);
+        saveJ(STORE.LOCAL_CACHE, owner.data);
+        renderActiveTab();
+        toast("Status akun diperbarui!", "success");
+      } catch (err) { toast("Gagal update akun: " + err.message, "error"); }
+    }
+
+    async function removeUser(uid, email) {
+      if (!confirm(`Hapus akun ${email} secara permanen?`)) return;
+      try {
+        if (owner.backendUrl && !(owner.session && owner.session.previewMode)) {
+          await gasApi("/api/admin/users/" + encodeURIComponent(uid) + "/delete", {});
+        }
+        owner.data.users = owner.data.users.filter(x => x.id !== uid);
+        saveJ(STORE.LOCAL_CACHE, owner.data);
+        renderActiveTab();
+        toast(`Akun ${email} dihapus.`, "info");
+      } catch (err) { toast("Gagal hapus: " + err.message, "error"); }
+    }
+
+    /* =========================================================================
+       10. TAB 6: BROADCAST NOTIFIKASI & ONESIGNAL PUSH BLAST
+       ========================================================================= */
+    function renderBroadcastManager(ws) {
+      const notifs = owner.data.notifications || [];
+      ws.innerHTML = `
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 text-xs">
+          <form onsubmit="submitBroadcast(event)" class="lg:col-span-7 p-5 rounded-2xl bg-surface border border-white/10 space-y-3.5">
+            <h3 class="text-sm font-black text-white">Kirim Broadcast ke Layar APK Pelanggan &amp; Website</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-zinc-400 font-bold mb-1">Kategori Notifikasi</label>
+                <select id="bcCat" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white">
+                  <option value="NEW_EPISODE">Episode Baru</option>
+                  <option value="NEW_ANIME">Anime / Film Baru</option>
+                  <option value="PROMO">Promo Diskon VIP</option>
+                  <option value="ANNOUNCEMENT">Pengumuman Resmi</option>
+                  <option value="BROADCAST">Broadcast Umum</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-zinc-400 font-bold mb-1">Target Penerima</label>
+                <select id="bcTier" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white">
+                  <option value="ALL">Semua Pengguna</option>
+                  <option value="VIP">Khusus Member VIP</option>
+                  <option value="FREE">Khusus Pengguna Gratis</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label class="block text-zinc-400 font-bold mb-1">Judul Pesan *</label>
+              <input id="bcTitle" required placeholder="Contoh: Episode Baru Detective Conan Dub Arab Sudah Tayang!" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white" />
+            </div>
+            <div>
+              <label class="block text-zinc-400 font-bold mb-1">Isi Pesan *</label>
+              <textarea id="bcBody" rows="3" required placeholder="Tulis pesan notifikasi untuk seluruh pelanggan..." class="w-full rounded-xl bg-[#090b10] border border-white/10 p-3 text-white"></textarea>
+            </div>
+            <label class="inline-flex items-center gap-2 cursor-pointer">
+              <input id="bcSendOneSignal" type="checkbox" ${owner.pushCfg.customerAppId && owner.pushCfg.restApiKey ? "checked" : ""} class="w-4 h-4 accent-[#10B981]" />
+              <span class="text-emerald-300 font-bold">Sekaligus kirim Push Notification OneSignal ke HP Android Pelanggan</span>
+            </label>
+            <button type="submit" class="w-full py-3 rounded-xl bg-brand hover:brightness-110 text-white font-black text-sm shadow-lg shadow-brand/25">📢 Kirim Broadcast Sekarang</button>
+          </form>
+
+          <div class="lg:col-span-5 space-y-4">
+            <form onsubmit="saveOneSignalBlastCfg(event)" class="p-4 rounded-2xl bg-surface border border-sky-500/25 space-y-2.5">
+              <h4 class="font-extrabold text-sky-300">Kunci Push OneSignal Pelanggan (Opsional — Tersimpan Lokal di HP Pemilik Saja)</h4>
+              <input id="osCustId" value="${esc(owner.pushCfg.customerAppId || "")}" placeholder="OneSignal App ID (Aplikasi Pelanggan)" class="w-full h-9 rounded-xl bg-[#090b10] border border-white/10 px-3 font-mono text-[11px] text-white" />
+              <input id="osRestKey" type="password" value="${esc(owner.pushCfg.restApiKey || "")}" placeholder="OneSignal REST API Key" class="w-full h-9 rounded-xl bg-[#090b10] border border-white/10 px-3 font-mono text-[11px] text-amber-300" />
+              <button type="submit" class="w-full py-2 rounded-xl bg-sky-600/25 hover:bg-sky-600/40 text-sky-200 font-bold">Simpan Kunci Push OneSignal</button>
+            </form>
+
+            <div class="p-4 rounded-2xl bg-surface border border-white/10 space-y-2 max-h-72 overflow-y-auto">
+              <h4 class="font-extrabold text-white">Riwayat Broadcast Terakhir (${notifs.length})</h4>
+              ${notifs.slice(0, 12).map(n => `
+                <div class="p-2.5 rounded-xl bg-[#090b10] border border-white/5">
+                  <p class="font-bold text-white">${esc(n.title)}</p>
+                  <p class="text-[11px] text-zinc-400">${esc(n.body)}</p>
+                </div>`).join("") || '<p class="text-zinc-500">Belum ada broadcast.</p>'}
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function saveOneSignalBlastCfg(e) {
+      e.preventDefault();
+      owner.pushCfg = {
+        customerAppId: document.getElementById("osCustId").value.trim(),
+        restApiKey: document.getElementById("osRestKey").value.trim()
+      };
+      saveJ(STORE.ONESIGNAL_PUSH, owner.pushCfg);
+      toast("Kunci Push OneSignal disimpan aman di perangkat ini!", "success");
+    }
+
+    async function submitBroadcast(e) {
+      e.preventDefault();
+      const payload = {
+        category: document.getElementById("bcCat").value,
+        targetTier: document.getElementById("bcTier").value,
+        title: document.getElementById("bcTitle").value.trim(),
+        body: document.getElementById("bcBody").value.trim()
+      };
+      const sendOS = document.getElementById("bcSendOneSignal").checked;
+      try {
+        if (owner.backendUrl && !(owner.session && owner.session.previewMode)) {
+          await gasApi("/api/admin/notifications/broadcast", payload);
+        }
+        owner.data.notifications.unshift({ id: "n-" + Date.now(), ...payload, createdAt: Date.now() });
+        saveJ(STORE.LOCAL_CACHE, owner.data);
+
+        if (sendOS && owner.pushCfg.customerAppId && owner.pushCfg.restApiKey) {
+          await fetch("https://api.onesignal.com/notifications", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Key " + owner.pushCfg.restApiKey
+            },
+            body: JSON.stringify({
+              app_id: owner.pushCfg.customerAppId,
+              included_segments: ["All"],
+              headings: { en: payload.title, id: payload.title },
+              contents: { en: payload.body, id: payload.body }
+            })
+          }).catch(() => {});
+        }
+        e.target.reset();
+        renderActiveTab();
+        toast("Broadcast berhasil dikirim ke seluruh pelanggan!", "vip");
+      } catch (err) { toast("Gagal broadcast: " + err.message, "error"); }
+    }
+
+    /* =========================================================================
+       11. TAB 7: GOOGLE DRIVE MASTER & VIDEO JOBS
+       ========================================================================= */
+    function renderDriveManager(ws) {
+      const jobs = owner.data.videoJobs || [];
+      const files = owner.data.driveFiles || [];
+      const cat = owner.data.catalog || [];
+      ws.innerHTML = `
+        <div class="space-y-4 text-xs">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <form onsubmit="submitDriveImport(event)" class="p-4 rounded-2xl bg-surface border border-white/10 space-y-3">
+              <h3 class="text-sm font-black text-white">Validasi &amp; Import Video Master Google Drive</h3>
+              <select id="drvEpTarget" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white">
+                ${cat.map(c => `<option value="${esc(c.id)}">${esc(c.title)}</option>`).join("") || '<option value="general">Umum</option>'}
+              </select>
+              <input id="drvFileIdInp" required placeholder="Tempel Link atau File ID Google Drive" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 font-mono text-amber-300" />
+              <button type="submit" class="w-full py-2.5 rounded-xl owner-gradient text-black font-black">Validasi via DriveApp Server</button>
+            </form>
+
+            <div class="p-4 rounded-2xl bg-surface border border-white/10 space-y-3">
+              <div class="flex items-center justify-between">
+                <h3 class="text-sm font-black text-white">Browser Video Google Drive Pribadi</h3>
+                <button type="button" onclick="fetchDriveVideoFiles()" class="px-3 py-1.5 rounded-lg bg-sky-600/25 text-sky-300 font-bold">↻ Muat File Drive</button>
+              </div>
+              <input id="drvFolderFilter" placeholder="Folder ID Google Drive (Opsional)" class="w-full h-9 rounded-xl bg-[#090b10] border border-white/10 px-3 font-mono text-zinc-300" />
+              <div class="max-h-40 overflow-y-auto space-y-1.5">
+                ${files.length ? files.map(f => `
+                  <div class="p-2 rounded-lg bg-[#090b10] flex items-center justify-between gap-2">
+                    <span class="truncate text-zinc-200">${esc(f.name)}</span>
+                    <button type="button" onclick="copyClip('${esc(f.id)}','File ID disalin!')" class="px-2 py-1 rounded bg-white/10 text-amber-300 font-mono text-[10px] shrink-0">Salin ID</button>
+                  </div>`).join("") : `<p class="text-zinc-500">Klik "Muat File Drive" untuk melihat file video dari Google Drive server.</p>`}
+              </div>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-surface border border-white/10 space-y-2.5">
+            <h3 class="text-sm font-black text-white">Antrian Video Jobs (${jobs.length})</h3>
+            ${jobs.length ? jobs.map(j => `
+              <div class="p-3 rounded-xl bg-[#090b10] border border-white/5 flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <p class="font-bold text-white">${esc(j.title || j.fileName)}</p>
+                  <p class="text-[11px] text-zinc-400">Stage: ${esc(j.stage)} · Status: <strong class="text-emerald-400">${esc(j.status)}</strong></p>
+                </div>
+                <button type="button" onclick="retryDriveJob('${esc(j.id)}')" class="px-3 py-1 rounded-lg bg-white/10 text-white font-bold">Retry</button>
+              </div>`).join("") : `<p class="text-zinc-500">Belum ada antrian video job.</p>`}
+          </div>
+        </div>`;
+    }
+
+    async function fetchDriveVideoFiles() {
+      try {
+        const folderId = (document.getElementById("drvFolderFilter") || {}).value || "";
+        const r = await gasApi("/api/drive/files", { folderId });
+        owner.data.driveFiles = r.files || [];
+        renderActiveTab();
+        toast(`Ditemukan ${owner.data.driveFiles.length} video di Google Drive!`, "success");
+      } catch (err) { toast("Gagal baca Drive: " + err.message, "error"); }
+    }
+
+    async function submitDriveImport(e) {
+      e.preventDefault();
+      try {
+        const gdriveFileId = extractDriveId(document.getElementById("drvFileIdInp").value);
+        const episodeId = document.getElementById("drvEpTarget").value;
+        await gasApi("/api/drive/import", { episodeId, gdriveFileId, mode: "FILE_ID" });
+        await syncAllOwnerData(true);
+        toast("File Google Drive berhasil divalidasi server!", "success");
+      } catch (err) { toast("Import gagal: " + err.message, "error"); }
+    }
+
+    async function retryDriveJob(jobId) {
+      try {
+        await gasApi("/api/drive/jobs/" + encodeURIComponent(jobId) + "/retry", {});
+        await syncAllOwnerData(true);
+        toast("Job dijalankan ulang!", "info");
+      } catch (err) { toast(err.message, "error"); }
+    }
+
+    /* =========================================================================
+       12. TAB 8: PENGATURAN BRAND, QRIS/BANK, KUOTA & AUDIT LOG
+       ========================================================================= */
+    function renderSettingsAudit(ws) {
+      const s = owner.data.settings || {};
+      const logs = owner.data.auditLogs || [];
+      ws.innerHTML = `
+        <form onsubmit="submitOwnerSettings(event)" class="p-4 sm:p-6 rounded-2xl bg-surface border border-white/10 space-y-5 text-xs">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
+            <div>
+              <h3 class="text-sm sm:text-base font-black text-white">Pengaturan Pusat (Tersinkronisasi ke APK Pelanggan &amp; Website)</h3>
+              <p class="text-[11px] text-zinc-400">Setiap perubahan langsung tersimpan di sheet <strong>Pengaturan</strong> Google Sheets.</p>
+            </div>
+            <button type="submit" class="px-5 py-2.5 rounded-xl owner-gradient text-black font-black">💾 Simpan ke Server</button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div class="sm:col-span-2 lg:col-span-3">
+              <label class="block text-emerald-300 font-bold mb-1">URL Backend Google Apps Script (Web App)</label>
+              <input id="stBackendUrl" type="url" value="${esc(owner.backendUrl || "")}" placeholder="https://script.google.com/macros/s/.../exec" class="w-full h-10 rounded-xl bg-[#090b10] border border-emerald-500/35 px-3 font-mono text-emerald-300" />
+            </div>
+            <div><label class="block text-zinc-300 font-bold mb-1">Nama Brand</label><input id="stBrand" value="${esc(s.brandName || "Animedubar")}" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white" /></div>
+            <div><label class="block text-zinc-300 font-bold mb-1">WhatsApp Admin (628xxx)</label><input id="stWa" value="${esc(s.whatsapp || "6281234567890")}" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white" /></div>
+            <div><label class="block text-zinc-300 font-bold mb-1">URL Aplikasi HP Pelanggan</label><input id="stCustApp" value="${esc(s.customerAppUrl || "")}" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white" /></div>
+            <div><label class="block text-amber-300 font-bold mb-1">Harga VIP Bulanan</label><input id="stPm" value="${esc(s.vipPriceMonthly || "Rp 29.000")}" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white" /></div>
+            <div><label class="block text-amber-300 font-bold mb-1">Harga VIP 3 Bulan</label><input id="stPq" value="${esc(s.vipPriceQuarterly || "Rp 75.000")}" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white" /></div>
+            <div><label class="block text-amber-300 font-bold mb-1">Harga VIP Tahunan</label><input id="stPy" value="${esc(s.vipPriceYearly || "Rp 249.000")}" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white" /></div>
+            <div><label class="block text-zinc-300 font-bold mb-1">URL Gambar QRIS</label><input id="stQris" value="${esc(s.qrisImageUrl || "")}" placeholder="https://.../qris.png" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white" /></div>
+            <div><label class="block text-zinc-300 font-bold mb-1">Bank Transfer (TF)</label><input id="stBank" value="${esc(s.bankName || "BCA / BSI / BRI")}" class="w-full h-10 rounded-xl bg-[#090b10] border border-white/10 px-3 text-white" /></div>
+            <div><label class="block text-zinc-300 font-bold mb-1">No. Rekening &amp; A/N</label><div class="grid grid-cols-2 gap-2"><input id="stRek" value="${esc(s.bankAccountNumber || "")}" placeholder="No. Rek" class="h-10 rounded-xl bg-[#090b10] border border-white/10 px-2.5 font-mono text-amber-300" /><input id="stHolder" value="${esc(s.bankAccountHolder || "ANIMEDUBAR")}" placeholder="Atas Nama" class="h-10 rounded-xl bg-[#090b10] border border-white/10 px-2.5 text-white" /></div></div>
+          </div>
+        </form>
+
+        <div class="p-4 sm:p-5 rounded-2xl bg-surface border border-white/10 space-y-2.5 text-xs">
+          <h3 class="text-sm font-black text-white">Audit Log Aktivitas Admin (${logs.length})</h3>
+          <div class="max-h-72 overflow-y-auto space-y-1.5">
+            ${logs.slice(0, 30).map(l => `
+              <div class="p-2.5 rounded-xl bg-[#090b10] border border-white/5 flex flex-wrap justify-between gap-2 text-[11px]">
+                <span><strong class="text-amber-300">${esc(l.role)}</strong> · ${esc(l.action)} (${esc(l.entityType)}: ${esc(l.entityId)})</span>
+                <span class="text-zinc-500">${esc(String(l.time || "").slice(0, 19).replace("T"," "))}</span>
+              </div>`).join("") || `<p class="text-zinc-500">Belum ada log audit.</p>`}
+          </div>
+        </div>`;
+    }
+
+    async function submitOwnerSettings(e) {
+      e.preventDefault();
+      const newUrl = document.getElementById("stBackendUrl").value.trim().replace(/\/+$/, "");
+      if (newUrl) { owner.backendUrl = newUrl; saveJ(STORE.BACKEND, newUrl); }
+      const settings = {
+        brandName: document.getElementById("stBrand").value.trim(),
+        whatsapp: document.getElementById("stWa").value.trim(),
+        customerAppUrl: document.getElementById("stCustApp").value.trim(),
+        vipPriceMonthly: document.getElementById("stPm").value.trim(),
+        vipPriceQuarterly: document.getElementById("stPq").value.trim(),
+        vipPriceYearly: document.getElementById("stPy").value.trim(),
+        qrisImageUrl: document.getElementById("stQris").value.trim(),
+        bankName: document.getElementById("stBank").value.trim(),
+        bankAccountNumber: document.getElementById("stRek").value.trim(),
+        bankAccountHolder: document.getElementById("stHolder").value.trim()
+      };
+      try {
+        if (owner.backendUrl && !(owner.session && owner.session.previewMode)) {
+          await gasApi("/api/admin/settings", { settings });
+        }
+        owner.data.settings = Object.assign({}, owner.data.settings, settings);
+        saveJ(STORE.LOCAL_CACHE, owner.data);
+        toast("Seluruh pengaturan tersimpan ke server Google Sheets!", "success");
+      } catch (err) { toast("Gagal simpan pengaturan: " + err.message, "error"); }
+    }
+
+    /* =========================================================================
+       13. ONESIGNAL NATIVE (OWNER APK) & PWA INSTALLER
+       ========================================================================= */
+    function initOwnerOneSignal() {
+      const appId = owner.oneSignalOwnerAppId;
+      if (!appId) return;
+      if (window.plugins && window.plugins.OneSignal) {
+        try {
+          window.plugins.OneSignal.initialize(appId);
+          window.plugins.OneSignal.Notifications.requestPermission(true);
+        } catch {}
+      }
+    }
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      owner.deferredPrompt = e;
+      const btn = document.getElementById("pwaInstallBtn");
+      if (btn) btn.classList.remove("hidden");
+    });
+
+    async function triggerPwaInstall() {
+      if (!owner.deferredPrompt) return;
+      owner.deferredPrompt.prompt();
+      await owner.deferredPrompt.userChoice;
+      owner.deferredPrompt = null;
+      document.getElementById("pwaInstallBtn").classList.add("hidden");
+    }
+
+    /* =========================================================================
+       14. BOOTSTRAP
+       ========================================================================= */
+    window.addEventListener("load", () => {
+      if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(()=>{});
+      document.getElementById("gateBackendUrl").value = owner.backendUrl || "";
+      if (owner.session && owner.session.user) {
+        launchOwnerShell();
+        syncAllOwnerData(true);
+      }
+      setInterval(() => { if (owner.session && !owner.session.previewMode) syncAllOwnerData(true); }, 60000);
+    });
+  </script>
+</body>
+</html>

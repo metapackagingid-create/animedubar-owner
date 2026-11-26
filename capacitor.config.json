@@ -1,0 +1,17 @@
+{
+  "appId": "com.animedubar.owner",
+  "appName": "Animedubar Owner",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": true,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": false
+  },
+  "plugins": {
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#090b10"
+    }
+  }
+}
