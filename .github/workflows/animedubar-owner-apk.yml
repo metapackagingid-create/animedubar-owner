@@ -1,0 +1,62 @@
+name: Build Animedubar Owner APK (Free Cloud Build + OneSignal)
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-owner-apk:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 1. Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 2. Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 3. Setup Java 17 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: 4. Install Capacitor & OneSignal Plugin
+        run: npm install
+
+      - name: 5. Inject Secrets (Apps Script URL & OneSignal)
+        env:
+          BACKEND_WEBAPP_URL: ${{ secrets.BACKEND_WEBAPP_URL }}
+          ONESIGNAL_OWNER_APP_ID: ${{ secrets.ONESIGNAL_OWNER_APP_ID }}
+        run: node scripts/configure-android.mjs
+
+      - name: 6. Add Android Platform & Sync
+        run: |
+          if [ ! -d "android" ]; then
+            npx cap add android
+          fi
+          npx cap sync android
+          node scripts/configure-android.mjs
+
+      - name: 7. Build Android APK (Gradle Cloud Build)
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: 8. Rename Output APK
+        run: |
+          mkdir -p release-output
+          cp android/app/build/outputs/apk/debug/app-debug.apk release-output/Animedubar-Owner-CMS.apk
+
+      - name: 9. Upload Owner APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Animedubar-Owner-CMS-APK
+          path: release-output/Animedubar-Owner-CMS.apk
+          retention-days: 30
